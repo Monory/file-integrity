@@ -13,6 +13,7 @@ integrity -s filename
 ```
 
 If file already exists in database, you will be warned about change.
+Currently, all hashsums are stored in file named *integrity.db*.
 
 #### Check
 To check if file was not corrupted use:
