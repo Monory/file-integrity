@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
     std::string filename;
     bool mode;
 
-    if (parse_args(argc, argv, &filename, &mode) != 0) {
+    if (parse_args(argc, argv, &filename, &mode)) {
         return 1;
     }
 
