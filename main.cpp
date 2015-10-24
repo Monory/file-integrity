@@ -89,7 +89,6 @@ void db_store(std::string filename, unsigned char*  digest) {
         std::strcpy(cstr, filename.c_str());
         Dbt key(cstr, filename.length());
 
-        key.set_flags(DB_DBT_USERMEM);
         Dbt value(digest, DIGEST_SIZE);
 
         int ret = db.put(NULL, &key, &value, DB_OVERWRITE_DUP);
@@ -110,7 +109,6 @@ int db_get(std::string filename, unsigned char* digest) {
         std::strcpy(cstr, filename.c_str());
         Dbt key(cstr, filename.length());
 
-        key.set_flags(DB_DBT_USERMEM);
         Dbt data;
         data.set_data(digest);
         data.set_ulen(DIGEST_SIZE);
