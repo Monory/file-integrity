@@ -10,7 +10,7 @@ const uint64_t DIGEST_SIZE = 32;
 class Digest {
  private:
   EVP_MD_CTX *context;
-  const unsigned int BUFFER_SIZE = 4096;
+  const unsigned int BUFFER_SIZE = 32*1024;
  public:
   Digest();
   ~Digest();
