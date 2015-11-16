@@ -4,7 +4,6 @@
 #include <openssl/evp.h>
 #include <string>
 #include <fstream>
-#include <iostream>
 
 Digest::Digest() {
   context = EVP_MD_CTX_create();
