@@ -1,36 +1,11 @@
+// Copyright 2015 Nikita Chudinov
+
 #include <getopt.h>
-#include <openssl/evp.h>
 #include <db_cxx.h>
 #include <iomanip>
 #include <fstream>
 #include <cstring>
-
-
-const unsigned int DIGEST_SIZE = 32;
-
-void digest_file(std::string filename, unsigned char *digest) {
-  std::ifstream file;
-  file.open(filename, std::ios::in | std::ios::binary);
-
-  const unsigned int BUFFER_SIZE = 4096;
-  char *buffer = new char[BUFFER_SIZE];
-
-  EVP_MD_CTX *context = EVP_MD_CTX_create();
-  EVP_MD_CTX_init(context);
-  EVP_DigestInit(context, EVP_sha256());
-
-
-  while (!file.eof()) {
-    file.read(buffer, BUFFER_SIZE);
-    EVP_DigestUpdate(context, buffer, file.gcount());
-  }
-
-  unsigned int digest_size;
-  EVP_DigestFinal(context, digest, &digest_size);
-
-  EVP_MD_CTX_cleanup(context);
-  EVP_MD_CTX_destroy(context);
-}
+#include "Digest.h"
 
 int parse_args(int argc, char *argv[], std::string *filename, bool *mode) {
   int opt;
@@ -127,9 +102,9 @@ int db_get(std::string filename, unsigned char *digest) {
   }
 }
 
-void store(std::string filename) {
+void store(std::string filename, const Digest &d) {
   unsigned char *digest = new unsigned char[DIGEST_SIZE];
-  digest_file(filename, digest);
+  d.DigestFile(filename, digest);
 
   db_store(filename, digest);
   std::cout << filename << ": ";
@@ -141,9 +116,9 @@ void store(std::string filename) {
   std::cout << std::endl << std::dec;
 }
 
-void check(std::string filename) {
+void check(std::string filename, const Digest &d) {
   unsigned char *digest = new unsigned char[DIGEST_SIZE];
-  digest_file(filename, digest);
+  d.DigestFile(filename, digest);
 
   unsigned char *db_digest = new unsigned char[DIGEST_SIZE];
   if (db_get(filename, db_digest)) {
@@ -176,11 +151,13 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  Digest d;
+
 
   if (mode) {
-    store(filename);
+    store(filename, d);
   } else {
-    check(filename);
+    check(filename, d);
   }
 
   return 0;
