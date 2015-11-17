@@ -4,6 +4,6 @@ mkdir build
 cd build
 cmake ..
 make
-cp integrity ..
+cp src/integrity ..
 cd ..
 rm -rf build
