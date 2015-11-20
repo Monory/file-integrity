@@ -23,7 +23,7 @@ void Database::Store(std::string filename, unsigned char *digest) {
   Dbt key(cstr, static_cast<uint32_t>(filename.length()));
   Dbt value(digest, DIGEST_SIZE);
 
-  int ret = db->put(NULL, &key, &value, DB_OVERWRITE_DUP);
+  db->put(NULL, &key, &value, DB_OVERWRITE_DUP);
 }
 
 int Database::Get(std::string filename, unsigned char *digest) {
