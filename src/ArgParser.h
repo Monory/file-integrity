@@ -7,14 +7,16 @@
 
 class ArgParser {
  private:
+  enum Mode: int;
+  boost::program_options::variables_map vm;
+  ArgParser::Mode mode = UNKNOWN;
   void conflictingOptions(const boost::program_options::variables_map &vm,
                           const std::string &opt1, const std::string &opt2);
-  boost::program_options::variables_map vm;
  public:
-  enum Mode {STORE, CHECK};
+  enum Mode: int {UNKNOWN, STORE, CHECK};
   std::string GetConfigFile();
-  ArgParser::Mode GetMode();
   ArgParser(int argc, const char *const argv[]);
+  Mode GetMode();
 };
 
 
