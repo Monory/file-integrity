@@ -25,7 +25,6 @@ std::vector<ParseUnit> ConfigParser::ParseConfig(std::string config_filename) {
     auto paths_iter = paths_pointer->second.equal_range("");
 
     for (auto path = paths_iter.first; path != paths_iter.second; ++path) {
-      //std::cout << path->second.get<std::string>("") << std::endl;
       unit.paths.push_back(path->second.get<std::string>(""));
     }
 
@@ -33,7 +32,6 @@ std::vector<ParseUnit> ConfigParser::ParseConfig(std::string config_filename) {
     auto regex_iter = regex_pointer->second.equal_range("");
 
     for (auto expr = regex_iter.first; expr != regex_iter.second; ++expr) {
-      //std::cout << expr->second.get<std::string>("") << std::endl;
       unit.regex.push_back(expr->second.get<std::string>(""));
     }
 
