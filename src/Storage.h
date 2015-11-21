@@ -6,6 +6,7 @@
 #include "ConfigParser.h"
 #include "Digest.h"
 #include <string>
+#include <vector>
 
 class Storage {
  private:
@@ -13,7 +14,7 @@ class Storage {
   Digest digest;
   const uint64_t DIGEST_SIZE = db.DIGEST_SIZE;
   void StoreUnitDigests(ParseUnit unit);
-  static bool CheckRegex(std::string path, ParseUnit unit);
+  static bool CheckRegex(std::string filename, ParseUnit unit);
  public:
   void StoreDigest(std::string filename);
   int CheckDigest(std::string filename);

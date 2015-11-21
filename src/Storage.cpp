@@ -4,6 +4,7 @@
 #include "Storage.h"
 #include <string>
 #include <vector>
+#include <regex>
 
 void Storage::StoreDigest(std::string filename) {
   unsigned char *data = new unsigned char[DIGEST_SIZE];
@@ -32,8 +33,16 @@ int Storage::CheckDigest(std::string filename) {
   return static_cast<int>(identical);
 }
 
-bool Storage::CheckRegex(std::string path, ParseUnit unit) {
-  return true;
+bool Storage::CheckRegex(std::string filename, ParseUnit unit) {
+  for (auto regex : unit.regex) {
+    std::regex expression(regex);
+
+    if (std::regex_match(filename, expression)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 void Storage::StoreUnitDigests(ParseUnit unit) {
@@ -50,7 +59,7 @@ void Storage::StoreUnitDigests(ParseUnit unit) {
 
         if (fs::is_regular(filepath) && CheckRegex(filepath.filename().string(), unit)) {
           std::cout << filepath.string() << std::endl;
-          //this->StoreDigest(path);
+          this->StoreDigest(filepath.string());
         }
       }
     } else {
@@ -61,7 +70,7 @@ void Storage::StoreUnitDigests(ParseUnit unit) {
 
         if (fs::is_regular(filepath) && CheckRegex(filepath.filename().string(), unit)) {
           std::cout << filepath.string() << std::endl;
-          //this->StoreDigest(filepath.string());
+          this->StoreDigest(filepath.string());
         }
       }
     }
