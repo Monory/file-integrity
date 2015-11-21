@@ -1,15 +1,17 @@
 // Copyright 2015 Nikita Chudinov
 
+#include <boost/filesystem.hpp>
 #include "Storage.h"
 #include <string>
+#include <vector>
 
-void Storage::Store(std::string filename) {
+void Storage::StoreDigest(std::string filename) {
   unsigned char *data = new unsigned char[DIGEST_SIZE];
   digest.DigestFile(filename, data);
   db.Store(filename, data);
 }
 
-int Storage::Check(std::string filename) {
+int Storage::CheckDigest(std::string filename) {
   unsigned char *data = new unsigned char[DIGEST_SIZE];
   digest.DigestFile(filename, data);
 
@@ -28,4 +30,46 @@ int Storage::Check(std::string filename) {
   }
 
   return static_cast<int>(identical);
+}
+
+bool Storage::CheckRegex(std::string path, ParseUnit unit) {
+  return true;
+}
+
+void Storage::StoreUnitDigests(ParseUnit unit) {
+  namespace fs = boost::filesystem;
+
+  for (auto path : unit.paths) {
+    fs::path p(path);
+
+    if (path[path.length() - 1] == '/') {  // If yes, check subdirectories recursively
+      fs::recursive_directory_iterator dir(p), end;
+
+      for (; dir != end; ++dir) {
+        fs::path filepath = fs::canonical(dir->path());
+
+        if (fs::is_regular(filepath) && CheckRegex(filepath.filename().string(), unit)) {
+          std::cout << filepath.string() << std::endl;
+          //this->StoreDigest(path);
+        }
+      }
+    } else {
+      fs::directory_iterator dir(p), end;
+
+      for (; dir != end; ++dir) {
+        fs::path filepath = fs::canonical(dir->path());
+
+        if (fs::is_regular(filepath) && CheckRegex(filepath.filename().string(), unit)) {
+          std::cout << filepath.string() << std::endl;
+          //this->StoreDigest(filepath.string());
+        }
+      }
+    }
+  }
+}
+
+void Storage::StoreUnitsDigests(std::vector<ParseUnit> units) {
+  for (auto unit : units) {
+    StoreUnitDigests(unit);
+  }
 }

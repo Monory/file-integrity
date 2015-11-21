@@ -8,7 +8,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 find_package(OpenSSL REQUIRED)
 find_package(BerkeleyDB REQUIRED)
-find_package(Boost COMPONENTS program_options system REQUIRED)
+find_package(Boost COMPONENTS program_options system filesystem REQUIRED)
 
 add_executable(integrity ${SOURCE_FILES})
 
