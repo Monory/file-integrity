@@ -3,7 +3,7 @@ project(integrity)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.cpp Digest.cpp Digest.h Database.cpp Database.h Storage.cpp Storage.h ArgParser.cpp ArgParser.h)
+set(SOURCE_FILES main.cpp Digest.cpp Digest.h Database.cpp Database.h Storage.cpp Storage.h ArgParser.cpp ArgParser.h ConfigParser.cpp ConfigParser.h)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 find_package(OpenSSL REQUIRED)
