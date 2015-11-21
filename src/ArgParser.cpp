@@ -14,7 +14,7 @@ ArgParser::ArgParser(int argc, const char *const argv[]) {
       ("help,h", "produce this help message")
       ("store,s", "save file hashes")
       ("check,c", "check file hashes")
-      ("config", po::value<std::string>(&config)->default_value("config.ini"), "config file location");
+      ("config", po::value<std::string>(&config)->default_value("config.json"), "config file location");
 
   try {
     po::store(po::command_line_parser(argc, argv).options(general_options).run(), vm);
