@@ -16,6 +16,7 @@ class Storage {
   void StoreUnitDigests(ParseUnit unit);
   static bool CheckRegex(std::string filename, ParseUnit unit);
  public:
+  enum CheckResult: int { NOT_FOUND, FAIL, PASS };
   void StoreDigest(std::string filename);
   int CheckDigest(std::string filename);
   void StoreUnitsDigests(std::vector<ParseUnit> units);

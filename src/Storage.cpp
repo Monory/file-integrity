@@ -13,12 +13,18 @@ void Storage::StoreDigest(std::string filename) {
 }
 
 int Storage::CheckDigest(std::string filename) {
+  namespace fs = boost::filesystem;
+
+  fs::path p(filename);
+  p = fs::canonical(p);
+  filename = p.string();
+
   unsigned char *data = new unsigned char[DIGEST_SIZE];
   digest.DigestFile(filename, data);
 
   unsigned char *db_digest = new unsigned char[DIGEST_SIZE];
   if (db.Get(filename, db_digest)) {
-    return -1;
+    return NOT_FOUND;
   }
 
   bool identical = true;
@@ -30,7 +36,11 @@ int Storage::CheckDigest(std::string filename) {
     }
   }
 
-  return static_cast<int>(identical);
+  if (identical) {
+    return PASS;
+  } else {
+    return FAIL;
+  }
 }
 
 bool Storage::CheckRegex(std::string filename, ParseUnit unit) {
