@@ -8,7 +8,6 @@
 int main(int argc, const char *const argv[]) {
     ArgParser arguments(argc, argv);
 
-
     switch (arguments.GetMode()) {
         case ArgParser::STORE: {
             auto units = ConfigParser::ParseConfig(arguments.GetConfigFile());

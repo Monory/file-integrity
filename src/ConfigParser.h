@@ -11,9 +11,9 @@ struct ParseUnit {
 };
 
 class ConfigParser {
-private:
 public:
     static std::vector<ParseUnit> ParseConfig(std::string config_filename);
+private:
 };
 
 #endif  // SRC_CONFIGPARSER_H_
