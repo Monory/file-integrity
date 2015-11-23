@@ -11,32 +11,32 @@
 #include <iostream>
 
 std::vector<ParseUnit> ConfigParser::ParseConfig(std::string config_filename) {
-  using boost::property_tree::ptree;
-  ptree pt;
+    using boost::property_tree::ptree;
+    ptree pt;
 
-  read_json(config_filename, pt);
-  std::vector<ParseUnit> result;
+    read_json(config_filename, pt);
+    std::vector<ParseUnit> result;
 
-  auto units = pt.equal_range("");
-  for (auto unit_iter = units.first; unit_iter != units.second; ++unit_iter) {
-    ParseUnit unit;
+    auto units = pt.equal_range("");
+    for (auto unit_iter = units.first; unit_iter != units.second; ++unit_iter) {
+        ParseUnit unit;
 
-    auto paths_pointer = unit_iter->second.find("paths");
-    auto paths_iter = paths_pointer->second.equal_range("");
+        auto paths_pointer = unit_iter->second.find("paths");
+        auto paths_iter = paths_pointer->second.equal_range("");
 
-    for (auto path = paths_iter.first; path != paths_iter.second; ++path) {
-      unit.paths.push_back(path->second.get<std::string>(""));
+        for (auto path = paths_iter.first; path != paths_iter.second; ++path) {
+            unit.paths.push_back(path->second.get<std::string>(""));
+        }
+
+        auto regex_pointer = unit_iter->second.find("regex");
+        auto regex_iter = regex_pointer->second.equal_range("");
+
+        for (auto expr = regex_iter.first; expr != regex_iter.second; ++expr) {
+            unit.regex.push_back(expr->second.get<std::string>(""));
+        }
+
+        result.push_back(unit);
     }
 
-    auto regex_pointer = unit_iter->second.find("regex");
-    auto regex_iter = regex_pointer->second.equal_range("");
-
-    for (auto expr = regex_iter.first; expr != regex_iter.second; ++expr) {
-      unit.regex.push_back(expr->second.get<std::string>(""));
-    }
-
-    result.push_back(unit);
-  }
-
-  return result;
+    return result;
 }

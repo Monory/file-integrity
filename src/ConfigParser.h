@@ -6,14 +6,14 @@
 #include <string>
 
 struct ParseUnit {
-  std::vector<std::string> paths;
-  std::vector<std::string> regex;
+    std::vector<std::string> paths;
+    std::vector<std::string> regex;
 };
 
 class ConfigParser {
- private:
- public:
-  static std::vector<ParseUnit> ParseConfig(std::string config_filename);
+private:
+public:
+    static std::vector<ParseUnit> ParseConfig(std::string config_filename);
 };
 
 #endif  // SRC_CONFIGPARSER_H_
