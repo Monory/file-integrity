@@ -18,7 +18,7 @@ Database::~Database() {
 
 void Database::Store(std::string filename, unsigned char *digest) {
     char *cstr = new char[filename.length() + 1];
-    std::snprintf(cstr, filename.length() + 1, filename.c_str());
+    memcpy(cstr, filename.c_str(), filename.length()+1);
 
     Dbt key(cstr, static_cast<uint32_t>(filename.length()));
     Dbt value(digest, DIGEST_SIZE);
@@ -30,7 +30,7 @@ int Database::Get(std::string filename, unsigned char *digest) {
     int ret = 0;
 
     char *cstr = new char[filename.length() + 1];
-    std::snprintf(cstr, filename.length() + 1, filename.c_str());
+    memcpy(cstr, filename.c_str(), filename.length()+1);
 
     Dbt key(cstr, static_cast<uint32_t>(filename.length()));
     Dbt data(digest, DIGEST_SIZE);
