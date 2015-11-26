@@ -6,4 +6,3 @@ cmake ..
 make
 cp src/integrity ..
 cd ..
-rm -rf build
