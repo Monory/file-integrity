@@ -1,6 +1,6 @@
 // Copyright 2015 Nikita Chudinov
 
-#include "ArgParser.h"
+#include "argument_parser.h"
 #include <iostream>
 #include <string>
 

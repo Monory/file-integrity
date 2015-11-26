@@ -1,7 +1,7 @@
 // Copyright Nikita Chudinov on 21.11.15.
 //
 
-#include "ConfigParser.h"
+#include "config_parser.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/foreach.hpp>

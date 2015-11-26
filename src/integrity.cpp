@@ -1,9 +1,9 @@
 // Copyright 2015 Nikita Chudinov
 
 #include <string>
-#include "Storage.h"
-#include "ArgParser.h"
-#include "ConfigParser.h"
+#include "storage.h"
+#include "argument_parser.h"
+#include "config_parser.h"
 
 int main(int argc, const char *const argv[]) {
     ArgParser arguments(argc, argv);

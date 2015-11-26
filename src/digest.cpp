@@ -1,6 +1,6 @@
 // Copyright 2015 Nikita Chudinov
 
-#include "Digest.h"
+#include "digest.h"
 #include <openssl/evp.h>
 #include <string>
 #include <fstream>

@@ -1,7 +1,7 @@
 // Copyright 2015 Nikita Chudinov
 
 #include <boost/filesystem.hpp>
-#include "Storage.h"
+#include "storage.h"
 #include <string>
 #include <vector>
 #include <regex>

@@ -2,9 +2,9 @@
 #ifndef SRC_STORAGE_H_
 #define SRC_STORAGE_H_
 
-#include "Database.h"
-#include "ConfigParser.h"
-#include "Digest.h"
+#include "database.h"
+#include "config_parser.h"
+#include "digest.h"
 #include <string>
 #include <vector>
 

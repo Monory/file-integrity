@@ -1,6 +1,6 @@
 // Copyright 2015 Nikita Chudinov
-#ifndef SRC_ARGPARSER_H_
-#define SRC_ARGPARSER_H_
+#ifndef SRC_ARGUMENT_PARSER_H_
+#define SRC_ARGUMENT_PARSER_H_
 
 #include <boost/program_options.hpp>
 #include <string>
@@ -20,4 +20,4 @@ private:
 };
 
 
-#endif  // SRC_ARGPARSER_H_
+#endif  // SRC_ARGUMENT_PARSER_H_

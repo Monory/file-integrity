@@ -1,6 +1,6 @@
 // Copyright 2015 Nikita Chudinov
-#ifndef SRC_CONFIGPARSER_H_
-#define SRC_CONFIGPARSER_H_
+#ifndef SRC_CONFIG_PARSER_H_
+#define SRC_CONFIG_PARSER_H_
 
 #include <vector>
 #include <string>
@@ -16,4 +16,4 @@ public:
 private:
 };
 
-#endif  // SRC_CONFIGPARSER_H_
+#endif  // SRC_CONFIG_PARSER_H_

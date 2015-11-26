@@ -1,6 +1,6 @@
 // Copyright 2015 Nikita Chudinov
 
-#include "Database.h"
+#include "database.h"
 #include <string>
 #include <cstring>
 
