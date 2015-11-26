@@ -12,7 +12,7 @@ int main(int argc, const char *const argv[]) {
         case ArgParser::STORE: {
             auto units = ConfigParser::ParseConfig(arguments.GetConfigFile());
             Storage storage;
-            storage.StoreUnitsDigests(units);
+            storage.StoreUnits(units);
             break;
         }
         case ArgParser::CHECK: {

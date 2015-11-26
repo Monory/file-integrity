@@ -12,14 +12,14 @@ class Storage {
 public:
     enum CheckResult: int { PASS = 0, FAIL = 1, NOT_FOUND = 2 };
     void StoreDigest(std::string filename);
-    int CheckDigest(std::string filename);
-    void StoreUnitsDigests(std::vector<ParseUnit> units);
+    CheckResult CheckDigest(std::string filename);
+    void StoreUnits(std::vector<ConfigUnit> units);
 private:
     Database db;
     Digest digest;
     const uint64_t DIGEST_SIZE = db.DIGEST_SIZE;
-    void StoreUnitDigests(ParseUnit unit);
-    static bool CheckRegex(std::string filename, ParseUnit unit);
+    void StoreUnit(ConfigUnit unit);
+    static bool CheckRegex(std::string filename, ConfigUnit unit);
 };
 
 

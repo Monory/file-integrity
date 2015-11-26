@@ -12,7 +12,7 @@ void Storage::StoreDigest(std::string filename) {
     db.Store(filename, data);
 }
 
-int Storage::CheckDigest(std::string filename) {
+CheckResult Storage::CheckDigest(std::string filename) {
     namespace fs = boost::filesystem;
 
     fs::path p(filename);
@@ -43,7 +43,7 @@ int Storage::CheckDigest(std::string filename) {
     }
 }
 
-bool Storage::CheckRegex(std::string filename, ParseUnit unit) {
+bool Storage::CheckRegex(std::string filename, ConfigUnit unit) {
     for (auto regex : unit.regex) {
         std::regex expression(regex);
 
@@ -55,7 +55,7 @@ bool Storage::CheckRegex(std::string filename, ParseUnit unit) {
     return false;
 }
 
-void Storage::StoreUnitDigests(ParseUnit unit) {
+void Storage::StoreUnit(ConfigUnit unit) {
     namespace fs = boost::filesystem;
 
     for (auto path : unit.paths) {
@@ -87,8 +87,8 @@ void Storage::StoreUnitDigests(ParseUnit unit) {
     }
 }
 
-void Storage::StoreUnitsDigests(std::vector<ParseUnit> units) {
+void Storage::StoreUnits(std::vector<ConfigUnit> units) {
     for (auto unit : units) {
-        StoreUnitDigests(unit);
+        StoreUnit(unit);
     }
 }

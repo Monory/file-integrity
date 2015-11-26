@@ -5,14 +5,14 @@
 #include <vector>
 #include <string>
 
-struct ParseUnit {
+struct ConfigUnit {
     std::vector<std::string> paths;
     std::vector<std::string> regex;
 };
 
 class ConfigParser {
 public:
-    static std::vector<ParseUnit> ParseConfig(std::string config_filename);
+    static std::vector<ConfigUnit> ParseConfig(std::string config_filename);
 private:
 };
 

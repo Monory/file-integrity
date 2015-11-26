@@ -7,16 +7,16 @@
 #include <vector>
 #include <string>
 
-std::vector<ParseUnit> ConfigParser::ParseConfig(std::string config_filename) {
+std::vector<ConfigUnit> ConfigParser::ParseConfig(std::string config_filename) {
     using boost::property_tree::ptree;
     ptree pt;
 
     read_json(config_filename, pt);
-    std::vector<ParseUnit> result;
+    std::vector<ConfigUnit> result;
 
     auto units = pt.equal_range("");
     for (auto unit_iter = units.first; unit_iter != units.second; ++unit_iter) {
-        ParseUnit unit;
+        ConfigUnit unit;
 
         auto paths_pointer = unit_iter->second.find("paths");
         auto paths_iter = paths_pointer->second.equal_range("");
