@@ -4,11 +4,8 @@
 #include "config_parser.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/foreach.hpp>
 #include <vector>
 #include <string>
-
-#include <iostream>
 
 std::vector<ParseUnit> ConfigParser::ParseConfig(std::string config_filename) {
     using boost::property_tree::ptree;
