@@ -4,11 +4,7 @@
 
 #include <vector>
 #include <string>
-
-struct ConfigUnit {
-    std::vector<std::string> paths;
-    std::vector<std::string> regex;
-};
+#include "config_unit.h"
 
 class ConfigParser {
 public:

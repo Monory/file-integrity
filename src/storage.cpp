@@ -12,7 +12,7 @@ void Storage::StoreDigest(std::string filename) {
     db.Store(filename, data);
 }
 
-CheckResult Storage::CheckDigest(std::string filename) {
+Storage::CheckResult Storage::CheckDigest(std::string filename) {
     namespace fs = boost::filesystem;
 
     fs::path p(filename);
@@ -57,33 +57,11 @@ bool Storage::CheckRegex(std::string filename, ConfigUnit unit) {
 
 void Storage::StoreUnit(ConfigUnit unit) {
     namespace fs = boost::filesystem;
+    boost::unordered_set<fs::path> files = unit.Files();
 
-    for (auto path : unit.paths) {
-        fs::path p(path);
-
-        if (path[path.length() - 1] == '/') {  // If yes, check subdirectories recursively
-            fs::recursive_directory_iterator dir(p), end;
-
-            for (; dir != end; ++dir) {
-                fs::path filepath = fs::canonical(dir->path());
-
-                if (fs::is_regular(filepath) && CheckRegex(filepath.filename().string(), unit)) {
-                    std::cout << filepath.string() << std::endl;
-                    this->StoreDigest(filepath.string());
-                }
-            }
-        } else {
-            fs::directory_iterator dir(p), end;
-
-            for (; dir != end; ++dir) {
-                fs::path filepath = fs::canonical(dir->path());
-
-                if (fs::is_regular(filepath) && CheckRegex(filepath.filename().string(), unit)) {
-                    std::cout << filepath.string() << std::endl;
-                    this->StoreDigest(filepath.string());
-                }
-            }
-        }
+    for (auto pathname : files) {
+        std::cout << pathname.string() << std::endl;
+        this->StoreDigest(pathname.string());
     }
 }
 

@@ -1,5 +1,4 @@
 // Copyright Nikita Chudinov on 21.11.15.
-//
 
 #include "config_parser.h"
 #include <boost/property_tree/ptree.hpp>
