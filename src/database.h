@@ -7,7 +7,7 @@
 
 class Database {
 public:
-    const uint64_t DIGEST_SIZE = 32;
+    static const uint64_t DIGEST_SIZE = 32;
     Database();
     ~Database();
     void Store(std::string filename, unsigned char *digest);

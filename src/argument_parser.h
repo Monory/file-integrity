@@ -8,9 +8,9 @@
 class ArgParser {
 public:
     enum Mode: int { CHECK = 0, STORE = 1, UNKNOWN = 2 };
+    ArgParser(int argc, const char *const argv[]);
     std::string GetConfigFile();
     std::string GetCheckFile();
-    ArgParser(int argc, const char *const argv[]);
     Mode GetMode();
 private:
     boost::program_options::variables_map vm;
