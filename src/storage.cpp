@@ -70,3 +70,40 @@ void Storage::StoreUnits(std::vector<ConfigUnit> units) {
         StoreUnit(unit);
     }
 }
+
+bool Storage::CheckUnits(std::vector<ConfigUnit> units) {
+    bool fail = false;
+
+    for (auto unit : units) {
+        if (CheckUnit(unit)) {
+            fail = true;
+        }
+    }
+
+    return fail;
+}
+
+bool Storage::CheckUnit(ConfigUnit unit) {
+    bool fail = false;
+    namespace fs = boost::filesystem;
+    boost::unordered_set<fs::path> files = unit.Files();
+
+    for (auto pathname : files) {
+        auto result = this->CheckDigest(pathname.string());
+
+        switch (result) {
+            case Storage::NOT_FOUND:
+                fail = true;
+                std::cerr << "No hash for this file: " << pathname.string() << std::endl;
+                break;
+            case Storage::FAIL:
+                fail = true;
+                std::cerr << "File is corrupted: " << pathname.string() << std::endl;
+                break;
+            case Storage::PASS:
+                break;
+        }
+    }
+
+    return fail;
+}

@@ -14,9 +14,11 @@ public:
     void StoreDigest(std::string filename);
     CheckResult CheckDigest(std::string filename);
     void StoreUnits(std::vector<ConfigUnit> units);
+    bool CheckUnits(std::vector<ConfigUnit> units);
 private:
     static bool CheckRegex(std::string filename, ConfigUnit unit);
     void StoreUnit(ConfigUnit unit);
+    bool CheckUnit(ConfigUnit unit);
     Database db;
     Digest digest;
     const uint64_t DIGEST_SIZE = db.DIGEST_SIZE;

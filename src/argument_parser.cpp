@@ -9,12 +9,11 @@ ArgParser::ArgParser(int argc, const char *const argv[]) {
     po::options_description general_options("General options");
 
     std::string config;
-    std::string check_file;
 
     general_options.add_options()
         ("help,h", "produce this help message")
         ("store,s", "save file hashes")
-        ("check,c", po::value<std::string>(&check_file), "check file hashes")
+        ("check,c", "check file hashes")
         ("config", po::value<std::string>(&config)->default_value("config.json"), "config file location");
 
     try {
@@ -43,10 +42,6 @@ void ArgParser::conflictingOptions(const boost::program_options::variables_map &
 
 std::string ArgParser::GetConfigFile() {
     return vm["config"].as<std::string>();
-}
-
-std::string ArgParser::GetCheckFile() {
-    return vm["check"].as<std::string>();
 }
 
 ArgParser::Mode ArgParser::GetMode() {

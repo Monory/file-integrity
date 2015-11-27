@@ -16,21 +16,10 @@ int main(int argc, const char *const argv[]) {
             break;
         }
         case ArgParser::CHECK: {
+            auto units = ConfigParser::ParseConfig(arguments.GetConfigFile());
             Storage storage;
-            int result = storage.CheckDigest(arguments.GetCheckFile());
 
-            switch (result) {
-                case Storage::NOT_FOUND:
-                    std::cerr << "No hash for this file" << std::endl;
-                    break;
-                case Storage::FAIL:
-                    std::cerr << "File is corrupted" << std::endl;
-                    break;
-                case Storage::PASS:
-                    std::cout << "File is valid" << std::endl;
-            }
-
-            break;
+            return storage.CheckUnits(units);
         }
         default:
             return 1;

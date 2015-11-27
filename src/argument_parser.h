@@ -10,7 +10,6 @@ public:
     enum Mode: int { CHECK = 0, STORE = 1, UNKNOWN = 2 };
     ArgParser(int argc, const char *const argv[]);
     std::string GetConfigFile();
-    std::string GetCheckFile();
     Mode GetMode();
 private:
     boost::program_options::variables_map vm;
