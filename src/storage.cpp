@@ -1,42 +1,37 @@
 // Copyright 2015 Nikita Chudinov
 
-#include <boost/filesystem.hpp>
 #include "storage.h"
+#include <sys/stat.h>
 #include <string>
 #include <vector>
-#include <regex>
+#include <boost/unordered_set.hpp>
+#include <boost/filesystem.hpp>
 
-void Storage::StoreDigest(std::string filename) {
-    unsigned char *data = new unsigned char[DIGEST_SIZE];
-    digest.DigestFile(filename, data);
-    db.Store(filename, data);
+void Storage::StoreMetadata(std::string filename) {
+    struct stat attributes;
+    stat(filename.c_str(), &attributes);
+
+    DbRecord record(filename, attributes);
+
+    digest.DigestFile(filename, record.data.digest);
+
+    db.Store(record);
 }
 
-Storage::CheckResult Storage::CheckDigest(std::string filename) {
-    namespace fs = boost::filesystem;
+Storage::CheckResult Storage::CheckMetadata(std::string filename) {
+    struct stat attributes;
+    stat(filename.c_str(), &attributes);
+    DbRecord current_metadata(filename, attributes);
 
-    fs::path p(filename);
-    p = fs::canonical(p);
-    filename = p.string();
+    digest.DigestFile(filename, current_metadata.data.digest);
 
-    unsigned char *data = new unsigned char[DIGEST_SIZE];
-    digest.DigestFile(filename, data);
-
-    unsigned char *db_digest = new unsigned char[DIGEST_SIZE];
-    if (db.Get(filename, db_digest)) {
+    DbRecord database_metadata;
+    database_metadata.filename = filename;
+    if (db.Get(&database_metadata)) {
         return NOT_FOUND;
     }
 
-    bool identical = true;
-
-    for (int i = 0; i < DIGEST_SIZE; ++i) {
-        if (data[i] != db_digest[i]) {
-            identical = false;
-            break;
-        }
-    }
-
-    if (identical) {
+    if (current_metadata == database_metadata) {
         return PASS;
     } else {
         return FAIL;
@@ -49,7 +44,7 @@ void Storage::StoreUnit(ConfigUnit unit) {
 
     for (auto pathname : files) {
         std::cout << pathname.string() << std::endl;
-        this->StoreDigest(pathname.string());
+        this->StoreMetadata(pathname.string());
     }
 }
 
@@ -77,7 +72,7 @@ bool Storage::CheckUnit(ConfigUnit unit) {
     boost::unordered_set<fs::path> files = unit.Files();
 
     for (auto pathname : files) {
-        auto result = this->CheckDigest(pathname.string());
+        auto result = this->CheckMetadata(pathname.string());
 
         switch (result) {
             case Storage::NOT_FOUND:
