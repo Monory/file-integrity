@@ -7,7 +7,7 @@
 
 // Is POD, so can be written to DB
 struct DbData {
-    char digest[32];
+    unsigned char digest[32];
     ino_t inode;
     mode_t mode;
     nlink_t hard_links_count;
@@ -15,11 +15,16 @@ struct DbData {
     gid_t gid;
     off_t byte_size;
     blkcnt_t block_count;
-    struct timespec access_time;
+    struct timespec modification_time;
     struct timespec status_change_time;
 };
 
-struct DbRecord {
+class DbRecord {
+public:
+    DbRecord();
+    DbRecord(std::string filename, struct stat attributes);
+    bool operator==(const DbRecord &b);
+    bool operator!=(const DbRecord &b);
     std::string filename;
     DbData data;
 };

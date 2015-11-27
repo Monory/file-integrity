@@ -59,7 +59,7 @@ bool Database::Get(DbRecord *record) {
 
     Dbt key(const_cast<char*>(record->filename.c_str()), record->filename.length());
     Dbt data(&record->data, sizeof(record->data));
-    data.set_ulen(DIGEST_SIZE);
+    data.set_ulen(sizeof(record->data));
     data.set_flags(DB_DBT_USERMEM);
 
     return_value = db->get(NULL, &key, &data, 0);

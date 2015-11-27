@@ -12,7 +12,9 @@ class Storage {
 public:
     enum CheckResult: int { PASS = 0, FAIL = 1, NOT_FOUND = 2 };
     void StoreDigest(std::string filename);
+    void StoreMetadata(std::string filename);
     CheckResult CheckDigest(std::string filename);
+    CheckResult CheckMetadata(std::string filename);
     void StoreUnits(std::vector<ConfigUnit> units);
     bool CheckUnits(std::vector<ConfigUnit> units);
 private:
