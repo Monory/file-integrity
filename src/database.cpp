@@ -26,7 +26,7 @@ void Database::Store(std::string filename, unsigned char *digest) {
     db->put(NULL, &key, &value, DB_OVERWRITE_DUP);
 }
 
-int Database::Get(std::string filename, unsigned char *digest) {
+bool Database::Get(std::string filename, unsigned char *digest) {
     int ret = 0;
 
     char *cstr = new char[filename.length() + 1];
@@ -43,5 +43,30 @@ int Database::Get(std::string filename, unsigned char *digest) {
         return 1;
     } else {
         return 0;
+    }
+}
+
+void Database::Store(DbRecord record) {
+    // const_cast is acceptable because BDB developers did not properly put const modifiers
+    Dbt key(const_cast<char*>(record.filename.c_str()), record.filename.length());
+    Dbt value(&record.data, sizeof(record.data));
+
+    db->put(NULL, &key, &value, DB_OVERWRITE_DUP);
+}
+
+bool Database::Get(DbRecord *record) {
+    int return_value;
+
+    Dbt key(const_cast<char*>(record->filename.c_str()), record->filename.length());
+    Dbt data(&record->data, sizeof(record->data));
+    data.set_ulen(DIGEST_SIZE);
+    data.set_flags(DB_DBT_USERMEM);
+
+    return_value = db->get(NULL, &key, &data, 0);
+
+    if (return_value == DB_NOTFOUND) {
+        return true;
+    } else {
+        return false;
     }
 }

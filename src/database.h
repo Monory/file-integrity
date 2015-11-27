@@ -4,6 +4,7 @@
 
 #include <db_cxx.h>
 #include <string>
+#include "db_record.h"
 
 class Database {
 public:
@@ -11,7 +12,9 @@ public:
     Database();
     ~Database();
     void Store(std::string filename, unsigned char *digest);
-    int Get(std::string filename, unsigned char *digest);
+    bool Get(std::string filename, unsigned char *digest);
+    void Store(DbRecord record);
+    bool Get(DbRecord *record);
 private:
     Db *db = new Db(NULL, 0);
 };
