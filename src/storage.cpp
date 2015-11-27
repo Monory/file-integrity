@@ -43,18 +43,6 @@ Storage::CheckResult Storage::CheckDigest(std::string filename) {
     }
 }
 
-bool Storage::CheckRegex(std::string filename, ConfigUnit unit) {
-    for (auto regex : unit.regex) {
-        std::regex expression(regex);
-
-        if (std::regex_match(filename, expression)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 void Storage::StoreUnit(ConfigUnit unit) {
     namespace fs = boost::filesystem;
     boost::unordered_set<fs::path> files = unit.Files();

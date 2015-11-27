@@ -16,7 +16,6 @@ public:
     void StoreUnits(std::vector<ConfigUnit> units);
     bool CheckUnits(std::vector<ConfigUnit> units);
 private:
-    static bool CheckRegex(std::string filename, ConfigUnit unit);
     void StoreUnit(ConfigUnit unit);
     bool CheckUnit(ConfigUnit unit);
     Database db;
