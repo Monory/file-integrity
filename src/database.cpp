@@ -18,7 +18,7 @@ Database::~Database() {
 
 void Database::Store(std::string filename, unsigned char *digest) {
     char *cstr = new char[filename.length() + 1];
-    memcpy(cstr, filename.c_str(), filename.length()+1);
+    memcpy(cstr, filename.c_str(), filename.length() + 1);
 
     Dbt key(cstr, static_cast<uint32_t>(filename.length()));
     Dbt value(digest, DIGEST_SIZE);
@@ -30,7 +30,7 @@ bool Database::Get(std::string filename, unsigned char *digest) {
     int ret = 0;
 
     char *cstr = new char[filename.length() + 1];
-    memcpy(cstr, filename.c_str(), filename.length()+1);
+    memcpy(cstr, filename.c_str(), filename.length() + 1);
 
     Dbt key(cstr, static_cast<uint32_t>(filename.length()));
     Dbt data(digest, DIGEST_SIZE);
@@ -48,7 +48,7 @@ bool Database::Get(std::string filename, unsigned char *digest) {
 
 void Database::Store(DbRecord record) {
     // const_cast is acceptable because BDB developers did not properly put const modifiers
-    Dbt key(const_cast<char*>(record.filename.c_str()), record.filename.length());
+    Dbt key(const_cast<char *>(record.filename.c_str()), record.filename.length());
     Dbt value(&record.data, sizeof(record.data));
 
     db->put(NULL, &key, &value, DB_OVERWRITE_DUP);
@@ -57,7 +57,7 @@ void Database::Store(DbRecord record) {
 bool Database::Get(DbRecord *record) {
     int return_value;
 
-    Dbt key(const_cast<char*>(record->filename.c_str()), record->filename.length());
+    Dbt key(const_cast<char *>(record->filename.c_str()), record->filename.length());
     Dbt data(&record->data, sizeof(record->data));
     data.set_ulen(sizeof(record->data));
     data.set_flags(DB_DBT_USERMEM);

@@ -2,7 +2,7 @@
 
 #include "db_record.h"
 
-DbRecord::DbRecord() {}
+DbRecord::DbRecord() { }
 
 DbRecord::DbRecord(std::string filename, struct stat attributes) {
     this->filename = filename;
@@ -19,7 +19,7 @@ DbRecord::DbRecord(std::string filename, struct stat attributes) {
 }
 
 bool DbRecord::operator==(const DbRecord &b) {
-    if(filename != b.filename ||
+    if (filename != b.filename ||
         data.inode != b.data.inode ||
         data.mode != b.data.mode ||
         data.hard_links_count != b.data.hard_links_count ||
@@ -34,7 +34,7 @@ bool DbRecord::operator==(const DbRecord &b) {
         return false;
     }
 
-    for (int i = 0; i < sizeof(data.digest)/sizeof(data.digest[0]); ++i) {
+    for (int i = 0; i < sizeof(data.digest) / sizeof(data.digest[0]); ++i) {
         if (data.digest[i] != b.data.digest[i]) {
             return false;
         }
