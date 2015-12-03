@@ -7,8 +7,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 #        argument_parser.h config_parser.cpp config_parser.h config_unit.cpp config_unit.h db_record.cpp db_record.h
 #        daemon.cpp)
 
-set(DAEMON_SOURCE daemon.cpp)
-set(CLIENT_SOURCE client.cpp)
+set(DAEMON_SOURCE daemon.cpp ipc.cpp ipc.h)
+set(CLIENT_SOURCE client.cpp ipc.cpp ipc.h)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
