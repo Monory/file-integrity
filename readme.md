@@ -6,10 +6,10 @@
 ## Usage
 ```
 General options:
-  -h [ --help ]               produce this help message
-  -s [ --store ]              save file hashes
-  -c [ --check ]              check file hashes
-  --config arg (=config.json) config file location
+  -h, --help            produce this help message
+  -s, --store           scan and store file metadata
+  -c, --check[=FILE]    check all files metadata (or one file, if provided)
+  --config=FILE         use provided config file (default: "./config.json")
 ```
 
 ## Compilation

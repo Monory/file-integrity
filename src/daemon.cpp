@@ -16,13 +16,13 @@ int main() {
         delete client;
 
         switch (message) {
-        case ArgParser::STORE: {
+        case ArgumentParser::STORE: {
             auto units = ConfigParser::ParseConfig("config.json");
             Storage storage;
             storage.StoreUnits(units);
             break;
         }
-        case ArgParser::CHECK: {
+        case ArgumentParser::CHECK: {
             auto units = ConfigParser::ParseConfig("config.json");
             Storage storage;
             storage.CheckUnits(units);
