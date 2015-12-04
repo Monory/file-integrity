@@ -1,6 +1,7 @@
 // Copyright 2015 Nikita Chudinov
 
 #include "ipc.h"
+#include <string>
 #include <sys/socket.h>
 #include <unistd.h>
 
@@ -51,4 +52,51 @@ int IpcClient::ReceiveCommand() {
     int message;
     read(descriptor, &message, sizeof(message));
     return message;
+}
+
+void IpcClient::SendString(std::string message) {
+    int size = message.size();
+    write(descriptor, &size, sizeof(size));
+
+    //const int BUFFER_SIZE = 128;
+
+    int start = 0;
+    while (start < size) {
+        int write_size;
+
+        if(size - start > 128) {
+            write_size = 128;
+        } else {
+            write_size = size - start;
+        }
+
+
+        write(descriptor, message.c_str() + start, write_size);
+        start += write_size;
+    }
+}
+
+std::string IpcClient::ReceiveString() {
+    int size;
+    read(descriptor, &size, sizeof(size));
+    std::string result = "";
+
+    const int BUFFER_SIZE = 128;
+    char buffer[BUFFER_SIZE];
+
+
+    while(size > 0) {
+        int read_size;
+        
+        if (size > BUFFER_SIZE) {
+            read_size = BUFFER_SIZE;
+        } else {
+            read_size = size;
+        }
+
+        read(descriptor, buffer, read_size);
+        result.append(buffer, read_size);
+        size -= read_size;
+    }
+    return result;
 }

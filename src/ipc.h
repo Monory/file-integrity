@@ -2,6 +2,7 @@
 #ifndef SRC_SOCKET_H_
 #define SRC_SOCKET_H_
 
+#include <string>
 #include <sys/socket.h>
 #include <sys/un.h>
 
@@ -12,6 +13,8 @@ public:
     ~IpcClient();
     void SendCommand(int message);
     int ReceiveCommand();
+    void SendString(std::string message);
+    std::string ReceiveString();
 private:
     int descriptor;
 };
