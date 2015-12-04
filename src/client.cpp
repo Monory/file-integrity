@@ -2,15 +2,15 @@
 
 #include <iostream>
 #include "ipc.h"
+#include "argument_parser.h"
 
-int main() {
+int main(int argc, const char *const argv[]) {
+    ArgParser arguments(argc, argv);
+
     IpcConnection socket("\0INTEGRITY");
-
     IpcClient *client = socket.MakeClient();
 
-    int message;
-    std::cin >> message;
+    client->SendCommand(arguments.GetMode());
 
-    client->SendMessage(message);
-    delete client;
+    return 0;
 }

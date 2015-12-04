@@ -10,8 +10,8 @@ public:
     IpcClient(int client_descriptor);
     IpcClient(int client_descriptor, struct sockaddr_un address);
     ~IpcClient();
-    void SendMessage(int message);
-    int ReceiveMessage();
+    void SendCommand(int message);
+    int ReceiveCommand();
 private:
     int descriptor;
 };

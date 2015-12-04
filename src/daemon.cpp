@@ -9,7 +9,7 @@ int main() {
 
     while (true) {
         IpcClient *client = conn.WaitForClient();
-        int message = client->ReceiveMessage();
+        int message = client->ReceiveCommand();
         delete client;
 
         if (message == 0) {

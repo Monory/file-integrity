@@ -8,20 +8,24 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 #        daemon.cpp)
 
 set(DAEMON_SOURCE daemon.cpp ipc.cpp ipc.h)
-set(CLIENT_SOURCE client.cpp ipc.cpp ipc.h)
+set(CLIENT_SOURCE client.cpp ipc.cpp ipc.h argument_parser.cpp 
+	argument_parser.h config_parser.cpp config_parser.h)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 #find_package(OpenSSL REQUIRED)
 #find_package(BerkeleyDB REQUIRED)
-#find_package(Boost COMPONENTS program_options system filesystem REQUIRED)
+find_package(Boost COMPONENTS program_options system filesystem REQUIRED)
 
 add_executable(daemon ${DAEMON_SOURCE})
 add_executable(client ${CLIENT_SOURCE})
 
 #include_directories(${OPENSSL_INCLUDE_DIR})
 #include_directories(${BERKELEY_DB_INCLUDE_DIR})
-#include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
+
+target_link_libraries(client ${Boost_LIBRARIES})
+
 
 #add_executable(integrity ${SOURCE_FILES})
 

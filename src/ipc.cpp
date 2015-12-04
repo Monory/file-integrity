@@ -43,11 +43,11 @@ IpcClient::~IpcClient() {
     close(descriptor);
 }
 
-void IpcClient::SendMessage(int message) {
+void IpcClient::SendCommand(int message) {
     write(descriptor, &message, sizeof(message));
 }
 
-int IpcClient::ReceiveMessage() {
+int IpcClient::ReceiveCommand() {
     int message;
     read(descriptor, &message, sizeof(message));
     return message;
