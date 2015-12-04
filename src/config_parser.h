@@ -4,7 +4,18 @@
 
 #include <vector>
 #include <string>
-#include "config_unit.h"
+#include <boost/filesystem.hpp>
+#include <boost/unordered_set.hpp>
+
+class ConfigUnit {
+public:
+    boost::unordered_set<boost::filesystem::path> Files();
+    std::vector<std::string> paths;
+    std::vector<std::string> regex;
+private:
+    bool CheckRegex(std::string filename);
+};
+
 
 class ConfigParser {
 public:
