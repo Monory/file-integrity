@@ -1,7 +1,10 @@
 // Copyright 2015 Nikita Chudinov
 
 #include <iostream>
+#include "argument_parser.h"
+#include "config_parser.h"
 #include "ipc.h"
+#include "storage.h"
 
 int main() {
     IpcConnection conn("\0INTEGRITY");
@@ -12,10 +15,21 @@ int main() {
         int message = client->ReceiveCommand();
         delete client;
 
-        if (message == 0) {
+        switch (message) {
+        case ArgParser::STORE: {
+            auto units = ConfigParser::ParseConfig("config.json");
+            Storage storage;
+            storage.StoreUnits(units);
             break;
-        } else {
-            std::cout << message << std::endl;
         }
+        case ArgParser::CHECK: {
+            auto units = ConfigParser::ParseConfig("config.json");
+            Storage storage;
+            storage.CheckUnits(units);
+            break;
+        }
+        default:
+            return 1;
+    }
     }
 }
