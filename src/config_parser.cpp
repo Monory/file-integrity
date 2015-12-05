@@ -1,41 +1,56 @@
-// Copyright Nikita Chudinov on 21.11.15.
+// Copyright 2015 Nikita Chudinov
 
 #include "config_parser.h"
+#include <regex>
+#include <string>
+#include <vector>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/unordered_set.hpp>
-#include <vector>
-#include <string>
-#include <regex>
 
-boost::unordered_set<boost::filesystem::path> ConfigUnit::Files() {
+ConfigParser::ConfigParser(std::string config_filename) {
+    using boost::property_tree::ptree;
+    ptree pt;
+
+    read_json(config_filename, pt);
+    auto paths = pt.equal_range("");
+    for (auto paths_iter = paths.first; paths_iter != paths.second; ++paths_iter) {
+        Path path;
+        path.path = paths_iter->second.get<std::string>("path");
+        path.regex = paths_iter->second.get<std::string>("regex");
+        path.recursive = paths_iter->second.get<bool>("recursive");
+
+        this->paths.push_back(path);
+    }
+}
+
+bool Path::CheckRegex(std::string filename) {
+    std::regex expression(regex);
+    return std::regex_match(filename, expression);
+}
+
+boost::unordered_set<boost::filesystem::path> Path::Files() {
     namespace fs = boost::filesystem;
     boost::unordered_set<fs::path> result;
 
-    for (auto pathname : paths) {
-        fs::path p(pathname);
+    fs::path p(path);
+    if (recursive) {
+        fs::recursive_directory_iterator dir(p), end;
 
-        // If path ends with forward slash, check subdirectories recursively
-        if (pathname[pathname.length() - 1] == '/' && pathname.length() > 1) {
-            fs::recursive_directory_iterator dir(p), end;
+        for (; dir != end; ++dir) {
+            fs::path file_path = fs::canonical(dir->path());
 
-            for (; dir != end; ++dir) {
-                fs::path file_path = fs::canonical(dir->path());
-
-                if (fs::is_regular(file_path) && CheckRegex(file_path.filename().string())) {
-                    result.insert(file_path);
-                }
+            if (fs::is_regular(file_path) && CheckRegex(file_path.filename().string())) {
+                result.insert(file_path);
             }
-        } else {
-            fs::directory_iterator dir(p), end;
+        }
+    } else {
+        fs::directory_iterator dir(p), end;
 
-            for (; dir != end; ++dir) {
-                fs::path file_path = fs::canonical(dir->path());
+        for (; dir != end; ++dir) {
+            fs::path file_path = fs::canonical(dir->path());
 
-                if (fs::is_regular(file_path) && CheckRegex(file_path.filename().string())) {
-                    result.insert(file_path);
-                }
+            if (fs::is_regular(file_path) && CheckRegex(file_path.filename().string())) {
+                result.insert(file_path);
             }
         }
     }
@@ -43,44 +58,13 @@ boost::unordered_set<boost::filesystem::path> ConfigUnit::Files() {
     return result;
 }
 
-bool ConfigUnit::CheckRegex(std::string filename) {
-    for (auto expr : regex) {
-        std::regex expression(expr);
+boost::unordered_set<boost::filesystem::path> ConfigParser::Files() {
+    namespace fs = boost::filesystem;
+    boost::unordered_set<fs::path> result;
 
-        if (std::regex_match(filename, expression)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-std::vector<ConfigUnit> ConfigParser::ParseConfig(std::string config_filename) {
-    using boost::property_tree::ptree;
-    ptree pt;
-
-    read_json(config_filename, pt);
-    std::vector<ConfigUnit> result;
-
-    auto units = pt.equal_range("");
-    for (auto unit_iter = units.first; unit_iter != units.second; ++unit_iter) {
-        ConfigUnit unit;
-
-        auto paths_pointer = unit_iter->second.find("paths");
-        auto paths_iter = paths_pointer->second.equal_range("");
-
-        for (auto path = paths_iter.first; path != paths_iter.second; ++path) {
-            unit.paths.push_back(path->second.get<std::string>(""));
-        }
-
-        auto regex_pointer = unit_iter->second.find("regex");
-        auto regex_iter = regex_pointer->second.equal_range("");
-
-        for (auto expr = regex_iter.first; expr != regex_iter.second; ++expr) {
-            unit.regex.push_back(expr->second.get<std::string>(""));
-        }
-
-        result.push_back(unit);
+    for (auto path : paths) {
+        auto path_files = path.Files();
+        result.insert(path_files.begin(), path_files.end());
     }
 
     return result;

@@ -1,21 +1,12 @@
 [
-   {
-      "paths": [
-         ".",
-         "src",
-         "/home"
-      ],
-      "regex": [
-         "^.*\\.\\S{1,3}$",
-         "\\d*"
-      ]
-   },
-   {
-      "paths": [
-         "./"
-      ],
-      "regex": [
-         ".*\\.\\S{5,}$"
-      ]
-   }
+    {
+        "path": ".",
+        "regex": ".*\\.\\S{5,}$",
+        "recursive": true
+    },
+    {
+        "path": ".",
+        "regex": "\\S*",
+        "recursive": false
+    }
 ]

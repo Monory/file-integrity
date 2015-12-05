@@ -38,9 +38,9 @@ Storage::CheckResult Storage::CheckMetadata(std::string filename) {
     }
 }
 
-void Storage::StoreUnit(ConfigUnit unit) {
+void Storage::StoreConfigFiles(ConfigParser parser) {
     namespace fs = boost::filesystem;
-    boost::unordered_set<fs::path> files = unit.Files();
+    boost::unordered_set<fs::path> files = parser.Files();
 
     for (auto pathname : files) {
         std::cout << pathname.string() << std::endl;
@@ -48,28 +48,11 @@ void Storage::StoreUnit(ConfigUnit unit) {
     }
 }
 
-void Storage::StoreUnits(std::vector<ConfigUnit> units) {
-    for (auto unit : units) {
-        StoreUnit(unit);
-    }
-}
-
-bool Storage::CheckUnits(std::vector<ConfigUnit> units) {
-    bool fail = false;
-
-    for (auto unit : units) {
-        if (CheckUnit(unit)) {
-            fail = true;
-        }
-    }
-
-    return fail;
-}
-
-bool Storage::CheckUnit(ConfigUnit unit) {
+bool Storage::CheckConfigFiles(ConfigParser parser) {
     bool fail = false;
     namespace fs = boost::filesystem;
-    boost::unordered_set<fs::path> files = unit.Files();
+
+    boost::unordered_set<fs::path> files = parser.Files();
 
     for (auto pathname : files) {
         auto result = this->CheckMetadata(pathname.string());

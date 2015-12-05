@@ -17,15 +17,15 @@ int main() {
 
         switch (message) {
         case ArgumentParser::STORE: {
-            auto units = ConfigParser::ParseConfig("config.json");
+            auto config = ConfigParser("config.json");
             Storage storage;
-            storage.StoreUnits(units);
+            storage.StoreConfigFiles(config);
             break;
         }
         case ArgumentParser::CHECK: {
-            auto units = ConfigParser::ParseConfig("config.json");
+            auto config = ConfigParser("config.json");
             Storage storage;
-            storage.CheckUnits(units);
+            storage.CheckConfigFiles(config);
             break;
         }
         default:
