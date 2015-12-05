@@ -1,13 +1,13 @@
 // Copyright 2015 Nikita Chudinov
 
-#include "config_parser.h"
+#include "path_list_parser.h"
 #include <regex>
 #include <string>
 #include <vector>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-ConfigParser::ConfigParser(std::string config_filename) {
+PathListParser::PathListParser(std::string config_filename) {
     using boost::property_tree::ptree;
     ptree pt;
 
@@ -58,7 +58,7 @@ boost::unordered_set<boost::filesystem::path> Path::Files() {
     return result;
 }
 
-boost::unordered_set<boost::filesystem::path> ConfigParser::Files() {
+boost::unordered_set<boost::filesystem::path> PathListParser::Files() {
     namespace fs = boost::filesystem;
     boost::unordered_set<fs::path> result;
 

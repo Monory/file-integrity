@@ -8,11 +8,11 @@ class ArgumentParser {
 public:
     enum Mode: int { CHECK = 0, STORE = 1, HELP = 2, UNKNOWN = -1 };
     ArgumentParser(int argc, char *argv[]);
-    std::string GetConfigFile();
+    std::string GetPathListFile();
     Mode GetMode();
 private:
     ArgumentParser::Mode mode = UNKNOWN;
-    std::string config_file = "config.json";
+    std::string path_list_file = "path_list.json";
     std::string check_file = "";
 };
 

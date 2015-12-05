@@ -9,7 +9,7 @@ General options:
   -h, --help            produce this help message
   -s, --store           scan and store file metadata
   -c, --check[=FILE]    check all files metadata (or one file, if provided)
-  --config=FILE         use provided config file (default: "./config.json")
+  --path_list=FILE      use provided config file (default: "./path_list.json")
 ```
 
 ## Compilation

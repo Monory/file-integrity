@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "argument_parser.h"
-#include "config_parser.h"
+#include "path_list_parser.h"
 #include "ipc.h"
 #include "storage.h"
 
@@ -17,15 +17,15 @@ int main() {
 
         switch (message) {
         case ArgumentParser::STORE: {
-            auto config = ConfigParser("config.json");
+            auto path_list = PathListParser("path_list.json");
             Storage storage;
-            storage.StoreConfigFiles(config);
+            storage.StorePathListMetadata(path_list);
             break;
         }
         case ArgumentParser::CHECK: {
-            auto config = ConfigParser("config.json");
+            auto path_list = PathListParser("path_list.json");
             Storage storage;
-            storage.CheckConfigFiles(config);
+            storage.CheckPathListMetadata(path_list);
             break;
         }
         default:

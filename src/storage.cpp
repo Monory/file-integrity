@@ -38,7 +38,7 @@ Storage::CheckResult Storage::CheckMetadata(std::string filename) {
     }
 }
 
-void Storage::StoreConfigFiles(ConfigParser parser) {
+void Storage::StorePathListMetadata(PathListParser parser) {
     namespace fs = boost::filesystem;
     boost::unordered_set<fs::path> files = parser.Files();
 
@@ -48,7 +48,7 @@ void Storage::StoreConfigFiles(ConfigParser parser) {
     }
 }
 
-bool Storage::CheckConfigFiles(ConfigParser parser) {
+bool Storage::CheckPathListMetadata(PathListParser parser) {
     bool fail = false;
     namespace fs = boost::filesystem;
 

@@ -13,7 +13,7 @@ R"(General options:
   -h, --help            produce this help message
   -s, --store           scan and store file metadata
   -c, --check[=FILE]    check all files metadata (or one file, if provided)
-  --config=FILE         use provided config file (default: "./config.json"))";
+  --path_list=FILE         use provided config file (default: "./path_list.json"))";
 
     const char *option_string = "sc::h?";
     int index;
@@ -21,13 +21,13 @@ R"(General options:
         {"help", no_argument, NULL, 'h'},
         {"store", no_argument, NULL, 's'},
         {"check", optional_argument, NULL, 'c'},
-        {"config", required_argument, NULL, 0}
+        {"path_list", required_argument, NULL, 0}
     };
 
     bool help = false;
     bool store = false;
     bool check = false;
-    std::string config_file = "config.json";
+    std::string path_list_file = "path_list.json";
     std::string check_file = "";
 
     int option = getopt_long(argc, argv, option_string, long_options, &index);
@@ -46,8 +46,8 @@ R"(General options:
                 help = true;
                 break;
             case 0:
-                if (strcmp(long_options[index].name, "config") == 0) {
-                    config_file = optarg;
+                if (strcmp(long_options[index].name, "path_list") == 0) {
+                    path_list_file = optarg;
                 }
                 break;
             default:
@@ -68,7 +68,7 @@ R"(General options:
         mode = HELP;
     }
 
-    this->config_file = config_file;
+    this->path_list_file = path_list_file;
     this->check_file = check_file;
 
     // conflicting options
@@ -81,8 +81,8 @@ R"(General options:
     }
 }
 
-std::string ArgumentParser::GetConfigFile() {
-    return config_file;
+std::string ArgumentParser::GetPathListFile() {
+    return path_list_file;
 }
 
 ArgumentParser::Mode ArgumentParser::GetMode() {
