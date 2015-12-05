@@ -4,8 +4,8 @@
 #include "ipc.h"
 #include "argument_parser.h"
 
-int main(int argc, const char *const argv[]) {
-    ArgParser arguments(argc, argv);
+int main(int argc, char *argv[]) {
+    ArgumentParser arguments(argc, argv);
 
     IpcConnection socket("\0INTEGRITY");
     IpcClient *client = socket.MakeClient();

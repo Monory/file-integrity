@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "argument_parser.h"
-#include "config_parser.h"
+#include "path_list_parser.h"
 #include "ipc.h"
 #include "storage.h"
 
@@ -16,16 +16,16 @@ int main() {
         delete client;
 
         switch (message) {
-        case ArgParser::STORE: {
-            auto units = ConfigParser::ParseConfig("config.json");
+        case ArgumentParser::STORE: {
+            auto path_list = PathListParser("path_list.json");
             Storage storage;
-            storage.StoreUnits(units);
+            storage.StorePathListMetadata(path_list);
             break;
         }
-        case ArgParser::CHECK: {
-            auto units = ConfigParser::ParseConfig("config.json");
+        case ArgumentParser::CHECK: {
+            auto path_list = PathListParser("path_list.json");
             Storage storage;
-            storage.CheckUnits(units);
+            storage.CheckPathListMetadata(path_list);
             break;
         }
         default:

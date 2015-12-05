@@ -3,7 +3,7 @@
 #define SRC_STORAGE_H_
 
 #include "database.h"
-#include "config_parser.h"
+#include "path_list_parser.h"
 #include "digest.h"
 #include <string>
 #include <vector>
@@ -13,11 +13,9 @@ public:
     enum CheckResult: int { PASS = 0, FAIL = 1, NOT_FOUND = 2 };
     void StoreMetadata(std::string filename);
     CheckResult CheckMetadata(std::string filename);
-    void StoreUnits(std::vector<ConfigUnit> units);
-    bool CheckUnits(std::vector<ConfigUnit> units);
+    void StorePathListMetadata(PathListParser parser);
+    bool CheckPathListMetadata(PathListParser parser);
 private:
-    void StoreUnit(ConfigUnit unit);
-    bool CheckUnit(ConfigUnit unit);
     Database db;
     Digest digest;
 };

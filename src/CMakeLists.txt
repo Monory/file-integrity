@@ -7,19 +7,18 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 #        argument_parser.h config_parser.cpp config_parser.h config_unit.cpp config_unit.h db_record.cpp db_record.h
 #        daemon.cpp)
 
-set(DAEMON_SOURCE daemon.cpp digest.cpp digest.h database.cpp database.h 
-    storage.cpp storage.h argument_parser.cpp argument_parser.h 
-    config_parser.cpp config_parser.h config_unit.cpp config_unit.h 
-    db_record.cpp db_record.h ipc.cpp ipc.h)
+set(DAEMON_SOURCE daemon.cpp digest.cpp digest.h database.cpp database.h
+        storage.cpp storage.h argument_parser.cpp argument_parser.h
+        db_record.cpp db_record.h ipc.cpp ipc.h path_list_parser.cpp path_list_parser.h)
 
-set(CLIENT_SOURCE client.cpp ipc.cpp ipc.h argument_parser.cpp 
-    argument_parser.h config_parser.cpp config_parser.h)
+set(CLIENT_SOURCE client.cpp ipc.cpp ipc.h argument_parser.cpp
+        argument_parser.h)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 find_package(OpenSSL REQUIRED)
 find_package(BerkeleyDB REQUIRED)
-find_package(Boost COMPONENTS program_options system filesystem REQUIRED)
+find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 add_executable(daemon ${DAEMON_SOURCE})
 add_executable(client ${CLIENT_SOURCE})
