@@ -13,17 +13,18 @@ int main() {
     while (true) {
         IpcClient *client = conn.WaitForClient();
         int message = client->ReceiveCommand();
+        std::string path_list_file = client->ReceiveString();
         delete client;
 
         switch (message) {
         case ArgumentParser::STORE: {
-            auto path_list = PathListParser("path_list.json");
+            auto path_list = PathListParser(path_list_file);
             Storage storage;
             storage.StorePathListMetadata(path_list);
             break;
         }
         case ArgumentParser::CHECK: {
-            auto path_list = PathListParser("path_list.json");
+            auto path_list = PathListParser(path_list_file);
             Storage storage;
             storage.CheckPathListMetadata(path_list);
             break;

@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
     IpcClient *client = socket.MakeClient();
 
     client->SendCommand(arguments.GetMode());
+    client->SendString(arguments.GetPathListFile());
 
     return 0;
 }
