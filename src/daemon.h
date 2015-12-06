@@ -5,6 +5,7 @@
 class Daemon {
 public:
     static void Start();
+    static void Kill();
 };
 
 #endif //SRC_DAEMON_H_

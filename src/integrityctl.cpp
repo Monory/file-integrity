@@ -3,6 +3,7 @@
 #include <iostream>
 #include "argument_parser.h"
 #include "daemon.h"
+#include "ipc.h"
 
 int main(int argc, char *argv[]) {
     ArgumentParser arguments(argc, argv);
@@ -12,14 +13,18 @@ int main(int argc, char *argv[]) {
             Daemon::Start();
             break;
         case ArgumentParser::KILL:
-            // KILL
+            Daemon::Kill();
             break;
         case ArgumentParser::UNKNOWN:
         case ArgumentParser::HELP:
             arguments.PrintHelpMessage();
             break;
         default:
-            std::cout << "Totally not a help message." << std::endl;
+            IpcConnection socket("\0INTEGRITY");
+            IpcClient *client = socket.MakeClient();
+
+            client->SendCommand(arguments.GetMode());
+            client->SendString(arguments.GetPathListFile());
             break;
     }
 

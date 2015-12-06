@@ -24,6 +24,7 @@ R"(General options:
         {"check", optional_argument, NULL, 'c'},
         {"path_list", required_argument, NULL, 0},
         {"start", no_argument, NULL, 0},
+        {"kill", no_argument, NULL, 0},
         {NULL, 0, 0, 0}
     };
 
@@ -31,6 +32,7 @@ R"(General options:
     bool store = false;
     bool check = false;
     bool start = false;
+    bool kill = false;
     std::string path_list_file = "path_list.json";
     std::string check_file = "";
 
@@ -54,6 +56,8 @@ R"(General options:
                     path_list_file = optarg;
                 } else if (strcmp(long_options[index].name, "start") == 0) {
                     start = true;
+                } else if (strcmp(long_options[index].name, "kill") == 0) {
+                    kill = true;
                 }
                 break;
             default:
@@ -75,6 +79,9 @@ R"(General options:
     }
     if (start) {
         mode = START;
+    }
+    if (kill) {
+        mode = KILL;
     }
 
     this->path_list_file = path_list_file;

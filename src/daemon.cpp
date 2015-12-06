@@ -37,3 +37,11 @@ void Daemon::Start() {
         }
     }
 }
+
+void Daemon::Kill() {
+    IpcConnection socket("\0INTEGRITY");
+    IpcClient *client = socket.MakeClient();
+
+    client->SendCommand(ArgumentParser::KILL);
+    client->SendString("");
+}
