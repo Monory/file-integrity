@@ -14,17 +14,17 @@ void Daemon::Start() {
     while (true) {
         IpcClient *client = conn.WaitForClient();
         int message = client->ReceiveCommand();
-        std::string path_list_file = client->ReceiveString();
-        delete client;
 
         switch (message) {
             case ArgumentParser::STORE: {
+                std::string path_list_file = client->ReceiveString();
                 auto path_list = PathListParser(path_list_file);
                 Storage storage;
                 storage.StorePathListMetadata(path_list);
                 break;
             }
             case ArgumentParser::CHECK: {
+                std::string path_list_file = client->ReceiveString();
                 auto path_list = PathListParser(path_list_file);
                 Storage storage;
                 storage.CheckPathListMetadata(path_list);
@@ -35,6 +35,8 @@ void Daemon::Start() {
             default:
                 break;
         }
+
+        delete client;
     }
 }
 
@@ -43,5 +45,4 @@ void Daemon::Kill() {
     IpcClient *client = socket.MakeClient();
 
     client->SendCommand(ArgumentParser::KILL);
-    client->SendString("");
 }

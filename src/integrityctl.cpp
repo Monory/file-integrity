@@ -15,16 +15,19 @@ int main(int argc, char *argv[]) {
         case ArgumentParser::KILL:
             Daemon::Kill();
             break;
-        case ArgumentParser::UNKNOWN:
-        case ArgumentParser::HELP:
-            arguments.PrintHelpMessage();
-            break;
-        default:
+        case ArgumentParser::STORE:
+        case ArgumentParser::CHECK: {
             IpcConnection socket("\0INTEGRITY");
             IpcClient *client = socket.MakeClient();
 
             client->SendCommand(arguments.GetMode());
             client->SendString(arguments.GetPathListFile());
+            break;
+        }
+        case ArgumentParser::UNKNOWN:
+        case ArgumentParser::HELP:
+        default:
+            arguments.PrintHelpMessage();
             break;
     }
 
