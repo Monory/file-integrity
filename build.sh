@@ -5,5 +5,4 @@ mkdir -p bin
 cd build
 cmake ..
 make
-cp src/daemon ../bin/
-cp src/client ../bin/
+cp src/integrityctl ../bin/

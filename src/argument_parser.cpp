@@ -8,12 +8,12 @@
 #include <string>
 
 ArgumentParser::ArgumentParser(int argc, char *argv[]) {
-    const char *HELP_MESSAGE =
+    HELP_MESSAGE =
 R"(General options:
   -h, --help            produce this help message
   -s, --store           scan and store file metadata
   -c, --check[=FILE]    check all files metadata (or one file, if provided)
-  --path_list=FILE         use provided config file (default: "./path_list.json"))";
+  --path_list=FILE      use provided config file (default: "./path_list.json"))";
 
     const char *option_string = "sc::h?";
     int index;
@@ -70,15 +70,6 @@ R"(General options:
 
     this->path_list_file = path_list_file;
     this->check_file = check_file;
-
-    // conflicting options
-    if (store + check + help > 1) {
-        std::cout << HELP_MESSAGE << std::endl;
-    }
-
-    if (mode == HELP || mode == UNKNOWN) {
-        std::cout << HELP_MESSAGE << std::endl;
-    }
 }
 
 std::string ArgumentParser::GetPathListFile() {
@@ -87,4 +78,8 @@ std::string ArgumentParser::GetPathListFile() {
 
 ArgumentParser::Mode ArgumentParser::GetMode() {
     return mode;
+}
+
+void ArgumentParser::PrintHelpMessage() {
+    std::cout << HELP_MESSAGE << std::endl;
 }
