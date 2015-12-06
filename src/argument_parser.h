@@ -6,11 +6,13 @@
 
 class ArgumentParser {
 public:
-    enum Mode: int { CHECK = 0, STORE = 1, HELP = 2, UNKNOWN = -1 };
+    enum Mode: int { UNKNOWN, CHECK, STORE, HELP, START, KILL};
     ArgumentParser(int argc, char *argv[]);
+    void PrintHelpMessage();
     std::string GetPathListFile();
     Mode GetMode();
 private:
+    const char *HELP_MESSAGE;
     ArgumentParser::Mode mode = UNKNOWN;
     std::string path_list_file = "path_list.json";
     std::string check_file = "";
