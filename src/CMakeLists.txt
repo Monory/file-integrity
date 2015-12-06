@@ -4,8 +4,7 @@ project(integrity)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 
 set(INTEGRITYCTL_SOURCE integrityctl.cpp argument_parser.cpp argument_parser.h daemon.cpp daemon.h ipc.cpp ipc.h
-        storage.cpp storage.h path_list_parser.cpp path_list_parser.h database.cpp database.h digest.cpp digest.h
-        db_record.cpp db_record.h)
+        storage.cpp storage.h path_list_parser.cpp path_list_parser.h database.cpp database.h digest.cpp digest.h)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 

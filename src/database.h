@@ -4,7 +4,32 @@
 
 #include <db_cxx.h>
 #include <string>
-#include "db_record.h"
+
+// Is POD, so can be written to DB
+struct DbData {
+    unsigned char digest[32];
+    ino_t inode;
+    mode_t mode;
+    nlink_t hard_links_count;
+    uid_t uid;
+    gid_t gid;
+    off_t byte_size;
+    blkcnt_t block_count;
+    struct timespec modification_time;
+    struct timespec status_change_time;
+};
+
+
+class DbRecord {
+public:
+    DbRecord();
+    DbRecord(std::string filename, struct stat attributes);
+    bool operator==(const DbRecord &b);
+    bool operator!=(const DbRecord &b);
+    std::string filename;
+    DbData data;
+};
+
 
 class Database {
 public:
