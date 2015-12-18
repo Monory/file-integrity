@@ -2,21 +2,20 @@
 #ifndef SRC_ARGUMENT_PARSER_H_
 #define SRC_ARGUMENT_PARSER_H_
 
-#include <boost/program_options.hpp>
 #include <string>
 
-class ArgParser {
+class ArgumentParser {
 public:
-    enum Mode: int { CHECK = 0, STORE = 1, UNKNOWN = 2 };
-    ArgParser(int argc, const char *const argv[]);
-    std::string GetConfigFile();
+    enum Mode: int { UNKNOWN, CHECK, STORE, HELP, START, KILL};
+    ArgumentParser(int argc, char *argv[]);
+    void PrintHelpMessage();
+    std::string GetPathListFile();
     Mode GetMode();
 private:
-    boost::program_options::variables_map vm;
-    ArgParser::Mode mode = UNKNOWN;
-    static void conflictingOptions(const boost::program_options::variables_map &vm,
-                                   const std::string &opt1, const std::string &opt2);
+    const char *HELP_MESSAGE;
+    ArgumentParser::Mode mode = UNKNOWN;
+    std::string path_list_file = "path_list.json";
+    std::string check_file = "";
 };
-
 
 #endif  // SRC_ARGUMENT_PARSER_H_

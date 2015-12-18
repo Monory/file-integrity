@@ -1,8 +1,8 @@
 #! /bin/sh
 
 mkdir -p build
+mkdir -p bin
 cd build
 cmake ..
 make
-cp src/integrity ..
-cd ..
+cp src/integrityctl ../bin/

@@ -1,0 +1,12 @@
+[
+    {
+        "path": ".",
+        "regex": ".*\\.\\S{5,}$",
+        "recursive": true
+    },
+    {
+        "path": ".",
+        "regex": "\\S*",
+        "recursive": false
+    }
+]
