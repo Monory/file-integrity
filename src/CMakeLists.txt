@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 project(integrity)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Ofast -march=native -std=c++11")
 
 set(INTEGRITYCTL_SOURCE integrityctl.cpp argument_parser.cpp argument_parser.h daemon.cpp daemon.h ipc.cpp ipc.h
         storage.cpp storage.h path_list_parser.cpp path_list_parser.h database.cpp database.h digest.cpp digest.h)
