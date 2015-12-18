@@ -6,7 +6,7 @@
 
 class ArgumentParser {
 public:
-    enum Mode: int { UNKNOWN, CHECK, STORE, HELP, START, KILL};
+    enum Mode: int { UNKNOWN, CHECK, STORE, HELP, START, KILL };
     ArgumentParser(int argc, char *argv[]);
     void PrintHelpMessage();
     Mode GetMode();

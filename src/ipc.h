@@ -23,14 +23,14 @@ private:
 // IPC for InterProcess Communication
 class IpcConnection {
 public:
-    enum Message: int { STORE = 0, CHECK = 1};
+    enum Message: int { STORE = 0, CHECK = 1 };
     IpcConnection(const char *name);
     ~IpcConnection();
     void Listen();
-    IpcClient* WaitForClient();
-    IpcClient* MakeClient();
+    IpcClient *WaitForClient();
+    IpcClient *MakeClient();
 private:
-    char* socket_name;
+    char *socket_name;
     int socket_descriptor;
     struct sockaddr_un address;
 };

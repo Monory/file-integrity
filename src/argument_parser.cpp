@@ -9,7 +9,7 @@
 
 ArgumentParser::ArgumentParser(int argc, char *argv[]) {
     HELP_MESSAGE =
-R"(General options:
+        R"(General options:
   -h, --help            produce this help message
   -s, --store           scan and store file metadata
   -c, --check           check all files metadata (or one file, if provided)
