@@ -7,6 +7,7 @@
 
 int main(int argc, char *argv[]) {
     ArgumentParser arguments(argc, argv);
+    int status = 0;
 
     switch (arguments.GetMode()) {
         case ArgumentParser::START:
@@ -25,11 +26,12 @@ int main(int argc, char *argv[]) {
             break;
         }
         case ArgumentParser::UNKNOWN:
+            status = 1;
         case ArgumentParser::HELP:
         default:
             arguments.PrintHelpMessage();
             break;
     }
 
-    return 0;
+    return status;
 }
