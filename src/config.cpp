@@ -15,10 +15,12 @@ ConfigParser::ConfigParser(std::string config_file) {
     std::string s = pt.get("log_severity", "warning");
 
     if (!s.compare("warning")) {
-        severity = plog::warning;
+        log_severity = plog::warning;
     } else if (!s.compare("info")) {
-        severity = plog::info;
+        log_severity = plog::info;
     }
+
+    log_filename = pt.get("log_filename", "integrity.log");
 }
 
 int ConfigParser::GetSleepDuration() {
@@ -29,6 +31,10 @@ std::string ConfigParser::GetPathListFile() {
     return path_list_file;
 }
 
-plog::Severity ConfigParser::GetSeverity() {
-    return severity;
+plog::Severity ConfigParser::GetLogSeverity() {
+    return log_severity;
+}
+
+std::string ConfigParser::GetLogFilename() {
+    return log_filename;
 }

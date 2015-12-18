@@ -10,11 +10,13 @@ public:
     ConfigParser(std::string config_file);
     int GetSleepDuration();
     std::string GetPathListFile();
-    plog::Severity GetSeverity();
+    std::string GetLogFilename();
+    plog::Severity GetLogSeverity();
 private:
     int sleep_duration = 3600;
     std::string path_list_file = "path_list.json";
-    plog::Severity severity = plog::warning;
+    plog::Severity log_severity = plog::warning;
+    std::string log_filename = "integrity.log";
 };
 
 

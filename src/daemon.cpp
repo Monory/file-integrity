@@ -12,6 +12,8 @@
 
 void Daemon::Start(ArgumentParser args) {
     ConfigParser config(args.GetConfig());
+    plog::init<plog::LogFormatter>(config.GetLogSeverity(), config.GetLogFilename().c_str());
+
     IpcConnection conn("\0INTEGRITY");
     conn.Listen();
 
