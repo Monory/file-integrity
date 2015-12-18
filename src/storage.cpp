@@ -43,10 +43,12 @@ void Storage::StorePathListMetadata(PathListParser parser) {
     namespace fs = boost::filesystem;
     boost::unordered_set<fs::path> files = parser.Files();
 
+    mtx.lock();
     for (auto pathname : files) {
         LOG_INFO << "Scanned " << pathname.string();
         this->StoreMetadata(pathname.string());
     }
+    mtx.unlock();
 }
 
 bool Storage::CheckPathListMetadata(PathListParser parser) {
@@ -55,6 +57,7 @@ bool Storage::CheckPathListMetadata(PathListParser parser) {
 
     boost::unordered_set<fs::path> files = parser.Files();
 
+    mtx.lock();
     for (auto pathname : files) {
         auto result = this->CheckMetadata(pathname.string());
 
@@ -71,6 +74,7 @@ bool Storage::CheckPathListMetadata(PathListParser parser) {
                 break;
         }
     }
+    mtx.unlock();
 
     return fail;
 }

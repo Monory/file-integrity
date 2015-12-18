@@ -6,16 +6,18 @@
 #include "path_list_parser.h"
 #include "digest.h"
 #include <string>
+#include <mutex>
 #include <vector>
 
 class Storage {
 public:
     enum CheckResult: int { PASS = 0, FAIL = 1, NOT_FOUND = 2 };
-    void StoreMetadata(std::string filename);
-    CheckResult CheckMetadata(std::string filename);
     void StorePathListMetadata(PathListParser parser);
     bool CheckPathListMetadata(PathListParser parser);
 private:
+    void StoreMetadata(std::string filename);
+    CheckResult CheckMetadata(std::string filename);
+    std::mutex mtx;
     Database db;
     Digest digest;
 };
