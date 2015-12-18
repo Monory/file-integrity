@@ -9,13 +9,12 @@ public:
     enum Mode: int { UNKNOWN, CHECK, STORE, HELP, START, KILL};
     ArgumentParser(int argc, char *argv[]);
     void PrintHelpMessage();
-    std::string GetPathListFile();
     Mode GetMode();
+    std::string GetConfig();
 private:
     const char *HELP_MESSAGE;
     ArgumentParser::Mode mode = UNKNOWN;
-    std::string path_list_file = "path_list.json";
-    std::string check_file = "";
+    std::string config;
 };
 
 #endif  // SRC_ARGUMENT_PARSER_H_

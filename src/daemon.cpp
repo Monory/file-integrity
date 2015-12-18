@@ -1,34 +1,44 @@
 // Copyright 2015 Nikita Chudinov
 
 #include "daemon.h"
+#include <unistd.h>
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include "argument_parser.h"
 #include "path_list_parser.h"
 #include "ipc.h"
 #include "storage.h"
+#include "config.h"
 
-void Daemon::Start() {
+void Daemon::Start(ArgumentParser args) {
+    ConfigParser config(args.GetConfig());
+    plog::init<plog::LogFormatter>(config.GetLogSeverity(), config.GetLogFilename().c_str());
+
     IpcConnection conn("\0INTEGRITY");
     conn.Listen();
 
-    Run(conn);
-}
+    Storage storage;
 
-void Daemon::Run(IpcConnection conn) {
+    daemon(1, 0);
+
+    std::thread schedule(Daemon::Schedule, std::ref(storage), config.GetPathListFile(), config.GetSleepDuration());
+
     while (true) {
         IpcClient *client = conn.WaitForClient();
         int message = client->ReceiveCommand();
 
         switch (message) {
             case ArgumentParser::STORE: {
-                Store(client);
+                Store(storage, config.GetPathListFile());
                 break;
             }
             case ArgumentParser::CHECK: {
-                Check(client);
+                Check(storage, config.GetPathListFile());
                 break;
             }
             case ArgumentParser::KILL:
+                storage.mtx.lock(); // wait for all db operations to end
                 exit(0);
             default:
                 break;
@@ -45,16 +55,19 @@ void Daemon::Kill() {
     client->SendCommand(ArgumentParser::KILL);
 }
 
-void Daemon::Store(IpcClient *client) {
-    std::string path_list_file = client->ReceiveString();
+void Daemon::Store(Storage &storage, std::string path_list_file) {
     auto path_list = PathListParser(path_list_file);
-    Storage storage;
     storage.StorePathListMetadata(path_list);
 }
 
-void Daemon::Check(IpcClient *client) {
-    std::string path_list_file = client->ReceiveString();
+void Daemon::Check(Storage &storage, std::string path_list_file) {
     auto path_list = PathListParser(path_list_file);
-    Storage storage;
     storage.CheckPathListMetadata(path_list);
+}
+
+void Daemon::Schedule(Storage &storage, std::string path_list_file, int sleep_duration) {
+    while (true) {
+        Daemon::Check(storage, path_list_file);
+        std::this_thread::sleep_for(std::chrono::seconds(sleep_duration));
+    }
 }
