@@ -1,6 +1,7 @@
 // Copyright 2015 Nikita Chudinov
 
 #include "daemon.h"
+#include <unistd.h>
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -18,6 +19,9 @@ void Daemon::Start(ArgumentParser args) {
     conn.Listen();
 
     Storage storage;
+
+    daemon(1, 0);
+
     std::thread schedule(Daemon::Schedule, std::ref(storage), config.GetPathListFile(), config.GetSleepDuration());
 
     while (true) {
