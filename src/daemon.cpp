@@ -21,17 +21,11 @@ void Daemon::Run(IpcConnection conn) {
 
         switch (message) {
             case ArgumentParser::STORE: {
-                std::string path_list_file = client->ReceiveString();
-                auto path_list = PathListParser(path_list_file);
-                Storage storage;
-                storage.StorePathListMetadata(path_list);
+                Store(client);
                 break;
             }
             case ArgumentParser::CHECK: {
-                std::string path_list_file = client->ReceiveString();
-                auto path_list = PathListParser(path_list_file);
-                Storage storage;
-                storage.CheckPathListMetadata(path_list);
+                Check(client);
                 break;
             }
             case ArgumentParser::KILL:
@@ -49,4 +43,18 @@ void Daemon::Kill() {
     IpcClient *client = socket.MakeClient();
 
     client->SendCommand(ArgumentParser::KILL);
+}
+
+void Daemon::Store(IpcClient *client) {
+    std::string path_list_file = client->ReceiveString();
+    auto path_list = PathListParser(path_list_file);
+    Storage storage;
+    storage.StorePathListMetadata(path_list);
+}
+
+void Daemon::Check(IpcClient *client) {
+    std::string path_list_file = client->ReceiveString();
+    auto path_list = PathListParser(path_list_file);
+    Storage storage;
+    storage.CheckPathListMetadata(path_list);
 }

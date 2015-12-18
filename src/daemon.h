@@ -7,8 +7,11 @@
 class Daemon {
 public:
     static void Start();
-    static void Run(IpcConnection conn);
     static void Kill();
+private:
+    static void Run(IpcConnection conn);
+    static void Store(IpcClient *client);
+    static void Check(IpcClient *client);
 };
 
 #endif //SRC_DAEMON_H_
