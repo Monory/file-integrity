@@ -12,11 +12,13 @@ ArgumentParser::ArgumentParser(int argc, char *argv[]) {
 R"(General options:
   -h, --help            produce this help message
   -s, --store           scan and store file metadata
-  -c, --check[=FILE]    check all files metadata (or one file, if provided)
-  --sleep=TIME          automatically check files every TIME seconds (default: 3600)
-  --path_list=FILE      use provided config file (default: "./path_list.json")
+  -c, --check           check all files metadata (or one file, if provided)
   --start               start daemon
-  --kill                kills daemon)";
+  --kill                kills daemon
+
+Start options:
+  --sleep=TIME          automatically check files every TIME seconds (default: 3600)
+  --path_list=FILE      use provided config file (default: "./path_list.json"))";
 
     const char *option_string = "sc::h?";
     int index;
