@@ -4,6 +4,7 @@
 #include <string>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <stdexcept>
 
 IpcConnection::IpcConnection(const char *name) {
     socket_descriptor = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -20,7 +21,10 @@ IpcConnection::~IpcConnection() {
 
 void IpcConnection::Listen() {
     bind(socket_descriptor, (struct sockaddr*)&address, sizeof(address)); // POSIX magic
-    listen(socket_descriptor, 3);
+    int status = listen(socket_descriptor, 3);
+    if (status != 0) {
+        throw std::runtime_error("Socket error. Are your trying to run two instances?");
+    }
 }
 
 IpcClient* IpcConnection::WaitForClient() {
@@ -87,7 +91,7 @@ std::string IpcClient::ReceiveString() {
 
     while(size > 0) {
         int read_size;
-        
+
         if (size > BUFFER_SIZE) {
             read_size = BUFFER_SIZE;
         } else {

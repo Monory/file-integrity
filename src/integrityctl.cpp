@@ -11,7 +11,12 @@ int main(int argc, char *argv[]) {
 
     switch (arguments.GetMode()) {
         case ArgumentParser::START:
-            Daemon::Start();
+            try {
+                Daemon::Start();
+            } catch (std::exception &e) {
+                std::cerr << "Error starting daemon: " << e.what() << std::endl;
+                status = 1;
+            }
             break;
         case ArgumentParser::KILL:
             Daemon::Kill();
