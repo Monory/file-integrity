@@ -5,9 +5,10 @@
 #include "argument_parser.h"
 #include "daemon.h"
 #include "ipc.h"
+#include "logging.h"
 
 int main(int argc, char *argv[]) {
-    plog::init(plog::debug, "log.txt");
+    plog::init<plog::LogFormatter>(plog::warning, "log.txt");
 
     ArgumentParser arguments(argc, argv);
     int status = 0;
