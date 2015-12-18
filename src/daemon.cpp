@@ -8,13 +8,17 @@
 #include "path_list_parser.h"
 #include "ipc.h"
 #include "storage.h"
+#include "config.h"
 
 void Daemon::Start(ArgumentParser args) {
+    ConfigParser config(args.GetConfig());
+    plog::init<plog::LogFormatter>(config.GetLogSeverity(), config.GetLogFilename().c_str());
+
     IpcConnection conn("\0INTEGRITY");
     conn.Listen();
 
     Storage storage;
-    std::thread schedule(Daemon::Schedule, std::ref(storage), args.GetPathListFile(), args.GetSleepDuration());
+    std::thread schedule(Daemon::Schedule, std::ref(storage), config.GetPathListFile(), config.GetSleepDuration());
 
     while (true) {
         IpcClient *client = conn.WaitForClient();
@@ -22,11 +26,11 @@ void Daemon::Start(ArgumentParser args) {
 
         switch (message) {
             case ArgumentParser::STORE: {
-                Store(storage, args.GetPathListFile());
+                Store(storage, config.GetPathListFile());
                 break;
             }
             case ArgumentParser::CHECK: {
-                Check(storage, args.GetPathListFile());
+                Check(storage, config.GetPathListFile());
                 break;
             }
             case ArgumentParser::KILL:

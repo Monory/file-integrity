@@ -8,8 +8,6 @@
 #include "logging.h"
 
 int main(int argc, char *argv[]) {
-    plog::init<plog::LogFormatter>(plog::warning, "log.txt");
-
     ArgumentParser arguments(argc, argv);
     int status = 0;
 

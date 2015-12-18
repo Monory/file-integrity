@@ -5,7 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Ofast -march=native -pthread -std
 
 set(INTEGRITYCTL_SOURCE integrityctl.cpp argument_parser.cpp argument_parser.h daemon.cpp daemon.h ipc.cpp ipc.h
         storage.cpp storage.h path_list_parser.cpp path_list_parser.h database.cpp database.h digest.cpp digest.h
-        logging.cpp logging.h)
+        logging.cpp logging.h config.cpp config.h)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 

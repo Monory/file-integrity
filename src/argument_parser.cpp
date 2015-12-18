@@ -17,18 +17,16 @@ R"(General options:
   --kill                kills daemon
 
 Start options:
-  --sleep=TIME          automatically check files every TIME seconds (default: 3600)
-  --path_list=FILE      use provided config file (default: "./path_list.json"))";
+  --config=FILE         starts daemon with provided config (default: config.json))";
 
     const char *option_string = "sc::h?";
     int index;
     struct option long_options[] = {
         {"help", no_argument, NULL, 'h'},
         {"store", no_argument, NULL, 's'},
-        {"check", optional_argument, NULL, 'c'},
-        {"sleep", required_argument, NULL, 0},
-        {"path_list", required_argument, NULL, 0},
+        {"check", no_argument, NULL, 'c'},
         {"start", no_argument, NULL, 0},
+        {"config", required_argument, NULL, 0},
         {"kill", no_argument, NULL, 0},
         {NULL, 0, 0, 0}
     };
@@ -38,9 +36,8 @@ Start options:
     bool check = false;
     bool start = false;
     bool kill = false;
-    int sleep = 3600;
-    std::string path_list_file = "path_list.json";
-    std::string check_file = "";
+    std::string config = "config.json";
+
 
     int option = getopt_long(argc, argv, option_string, long_options, &index);
     while (option != -1) {
@@ -50,22 +47,17 @@ Start options:
                 break;
             case 'c':
                 check = true;
-                if (optarg != NULL) {
-                    check_file = optarg;
-                }
                 break;
             case 'h':
                 help = true;
                 break;
             case 0:
-                if (strcmp(long_options[index].name, "path_list") == 0) {
-                    path_list_file = optarg;
-                } else if (strcmp(long_options[index].name, "start") == 0) {
+                if (strcmp(long_options[index].name, "start") == 0) {
                     start = true;
                 } else if (strcmp(long_options[index].name, "kill") == 0) {
                     kill = true;
-                } else if (strcmp(long_options[index].name, "sleep") == 0) {
-                    sleep = std::stoi(optarg);
+                } else if (strcmp(long_options[index].name, "config") == 0) {
+                    config = optarg;
                 }
                 break;
             default:
@@ -92,23 +84,17 @@ Start options:
         mode = KILL;
     }
 
-    this->path_list_file = path_list_file;
-    this->check_file = check_file;
-    this->sleep_duration = sleep;
-}
-
-std::string ArgumentParser::GetPathListFile() {
-    return path_list_file;
+    this->config = config;
 }
 
 ArgumentParser::Mode ArgumentParser::GetMode() {
     return mode;
 }
 
-int ArgumentParser::GetSleepDuration() {
-    return sleep_duration;
-}
-
 void ArgumentParser::PrintHelpMessage() {
     std::cout << HELP_MESSAGE << std::endl;
+}
+
+std::string ArgumentParser::GetConfig() {
+    return config;
 }
