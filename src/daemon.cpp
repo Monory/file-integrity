@@ -11,6 +11,10 @@ void Daemon::Start() {
     IpcConnection conn("\0INTEGRITY");
     conn.Listen();
 
+    Run(conn);
+}
+
+void Daemon::Run(IpcConnection conn) {
     while (true) {
         IpcClient *client = conn.WaitForClient();
         int message = client->ReceiveCommand();
