@@ -1,11 +1,15 @@
 // Copyright 2015 Nikita Chudinov
 
 #include <iostream>
+#include "plog/Log.h"
 #include "argument_parser.h"
 #include "daemon.h"
 #include "ipc.h"
+#include "logging.h"
 
 int main(int argc, char *argv[]) {
+    plog::init<plog::LogFormatter>(plog::warning, "log.txt");
+
     ArgumentParser arguments(argc, argv);
     int status = 0;
 

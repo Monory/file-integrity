@@ -6,6 +6,7 @@
 #include <vector>
 #include <boost/unordered_set.hpp>
 #include <boost/filesystem.hpp>
+#include <plog/Log.h>
 
 void Storage::StoreMetadata(std::string filename) {
     struct stat attributes;
@@ -43,7 +44,7 @@ void Storage::StorePathListMetadata(PathListParser parser) {
     boost::unordered_set<fs::path> files = parser.Files();
 
     for (auto pathname : files) {
-        std::cout << pathname.string() << std::endl;
+        LOG_INFO << "Scanned " << pathname.string();
         this->StoreMetadata(pathname.string());
     }
 }
@@ -60,11 +61,11 @@ bool Storage::CheckPathListMetadata(PathListParser parser) {
         switch (result) {
             case Storage::NOT_FOUND:
                 fail = true;
-                std::cerr << "No hash for this file: " << pathname.string() << std::endl;
+                LOG_WARNING << "No hash for this file: " << pathname.string();
                 break;
             case Storage::FAIL:
                 fail = true;
-                std::cerr << "File is corrupted: " << pathname.string() << std::endl;
+                LOG_WARNING << "File is corrupted: " << pathname.string();
                 break;
             case Storage::PASS:
                 break;
