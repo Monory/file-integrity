@@ -11,11 +11,13 @@ public:
     void PrintHelpMessage();
     std::string GetPathListFile();
     Mode GetMode();
+    int GetSleepDuration();
 private:
     const char *HELP_MESSAGE;
     ArgumentParser::Mode mode = UNKNOWN;
     std::string path_list_file = "path_list.json";
     std::string check_file = "";
+    int sleep_duration = 3600;
 };
 
 #endif  // SRC_ARGUMENT_PARSER_H_

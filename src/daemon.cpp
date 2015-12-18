@@ -2,33 +2,35 @@
 
 #include "daemon.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include "argument_parser.h"
 #include "path_list_parser.h"
 #include "ipc.h"
 #include "storage.h"
 
-void Daemon::Start() {
+void Daemon::Start(ArgumentParser args) {
     IpcConnection conn("\0INTEGRITY");
     conn.Listen();
 
-    Run(conn);
-}
+    Storage storage;
+    std::thread schedule(Daemon::Schedule, std::ref(storage), args.GetPathListFile(), args.GetSleepDuration());
 
-void Daemon::Run(IpcConnection conn) {
     while (true) {
         IpcClient *client = conn.WaitForClient();
         int message = client->ReceiveCommand();
 
         switch (message) {
             case ArgumentParser::STORE: {
-                Store(client);
+                Store(storage, args.GetPathListFile());
                 break;
             }
             case ArgumentParser::CHECK: {
-                Check(client);
+                Check(storage, args.GetPathListFile());
                 break;
             }
             case ArgumentParser::KILL:
+                storage.mtx.lock(); // wait for all db operations to end
                 exit(0);
             default:
                 break;
@@ -45,16 +47,19 @@ void Daemon::Kill() {
     client->SendCommand(ArgumentParser::KILL);
 }
 
-void Daemon::Store(IpcClient *client) {
-    std::string path_list_file = client->ReceiveString();
+void Daemon::Store(Storage &storage, std::string path_list_file) {
     auto path_list = PathListParser(path_list_file);
-    Storage storage;
     storage.StorePathListMetadata(path_list);
 }
 
-void Daemon::Check(IpcClient *client) {
-    std::string path_list_file = client->ReceiveString();
+void Daemon::Check(Storage &storage, std::string path_list_file) {
     auto path_list = PathListParser(path_list_file);
-    Storage storage;
     storage.CheckPathListMetadata(path_list);
+}
+
+void Daemon::Schedule(Storage &storage, std::string path_list_file, int sleep_duration) {
+    while (true) {
+        Daemon::Check(storage, path_list_file);
+        std::this_thread::sleep_for(std::chrono::seconds(sleep_duration));
+    }
 }

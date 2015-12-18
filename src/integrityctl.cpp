@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     switch (arguments.GetMode()) {
         case ArgumentParser::START:
             try {
-                Daemon::Start();
+                Daemon::Start(arguments);
             } catch (std::exception &e) {
                 std::cerr << "Error starting daemon: " << e.what() << std::endl;
                 status = 1;
@@ -31,7 +31,6 @@ int main(int argc, char *argv[]) {
             IpcClient *client = socket.MakeClient();
 
             client->SendCommand(arguments.GetMode());
-            client->SendString(arguments.GetPathListFile());
             break;
         }
         case ArgumentParser::UNKNOWN:
