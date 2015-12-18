@@ -1,0 +1,6 @@
+{
+    "sleep_duration": 3600,
+    "path_list_file": "path_list.json",
+    "log_severity": "info",
+    "log_filename": "integrity.log"
+}
