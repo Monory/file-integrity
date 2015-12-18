@@ -14,7 +14,8 @@ R"(General options:
   -s, --store           scan and store file metadata
   -c, --check[=FILE]    check all files metadata (or one file, if provided)
   --path_list=FILE      use provided config file (default: "./path_list.json")
-  --start               start daemon)";
+  --start               start daemon
+  --kill                kills daemon)";
 
     const char *option_string = "sc::h?";
     int index;
