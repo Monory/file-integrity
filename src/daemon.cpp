@@ -25,7 +25,7 @@ void Daemon::Start(ArgumentParser args) {
     std::thread schedule(Daemon::Schedule, std::ref(storage), config.GetPathListFile(), config.GetSleepDuration());
 
     while (true) {
-        IpcClient *client = conn.WaitForClient();
+        std::shared_ptr<IpcClient> client = conn.WaitForClient();
         int message = client->ReceiveCommand();
 
         switch (message) {
@@ -43,14 +43,12 @@ void Daemon::Start(ArgumentParser args) {
             default:
                 break;
         }
-
-        delete client;
     }
 }
 
 void Daemon::Kill() {
     IpcConnection socket("\0INTEGRITY");
-    IpcClient *client = socket.MakeClient();
+    std::shared_ptr<IpcClient> client = socket.MakeClient();
 
     client->SendCommand(ArgumentParser::KILL);
 }

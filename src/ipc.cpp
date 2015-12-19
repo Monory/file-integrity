@@ -2,9 +2,10 @@
 
 #include "ipc.h"
 #include <string>
+#include <memory>
+#include <stdexcept>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <stdexcept>
 
 IpcConnection::IpcConnection(const char *name) {
     socket_descriptor = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -27,13 +28,13 @@ void IpcConnection::Listen() {
     }
 }
 
-IpcClient *IpcConnection::WaitForClient() {
+std::shared_ptr<IpcClient> IpcConnection::WaitForClient() {
     int client = accept(socket_descriptor, NULL, NULL);
-    return new IpcClient(client);
+    return std::make_shared<IpcClient>(client);
 }
 
-IpcClient *IpcConnection::MakeClient() {
-    return new IpcClient(socket_descriptor, address);
+std::shared_ptr<IpcClient> IpcConnection::MakeClient() {
+    return std::make_shared<IpcClient>(socket_descriptor, address);
 }
 
 IpcClient::IpcClient(int client_descriptor) {
