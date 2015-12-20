@@ -9,14 +9,13 @@
 #include "ipc.h"
 #include "storage.h"
 
-void Daemon::Start(ArgumentParser args) {
+Daemon::Daemon(ArgumentParser args) {
     IpcConnection conn("\0INTEGRITY");
     conn.Listen();
 
     Storage storage;
-    std::thread schedule(Daemon::Schedule, std::ref(storage), args.GetPathListFile(), args.GetSleepDuration());
+    std::thread schedule(&Daemon::Schedule, this, std::ref(storage), args.GetPathListFile(), args.GetSleepDuration());
 
-    bool running = true;
     while (running) {
         IpcClient *client = conn.WaitForClient();
         int message = client->ReceiveCommand();
@@ -40,6 +39,8 @@ void Daemon::Start(ArgumentParser args) {
 
         delete client;
     }
+
+    schedule.join();
 }
 
 void Daemon::Kill() {
@@ -60,8 +61,15 @@ void Daemon::Check(Storage &storage, std::string path_list_file) {
 }
 
 void Daemon::Schedule(Storage &storage, std::string path_list_file, int sleep_duration) {
-    while (true) {
-        Daemon::Check(storage, path_list_file);
-        std::this_thread::sleep_for(std::chrono::seconds(sleep_duration));
+    int time_left = sleep_duration;
+
+    while (running) {
+        if (time_left) {
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            --time_left;
+        } else {
+            Daemon::Check(storage, path_list_file);
+            time_left = sleep_duration;
+        }
     }
 }
