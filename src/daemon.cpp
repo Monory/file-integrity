@@ -16,7 +16,8 @@ void Daemon::Start(ArgumentParser args) {
     Storage storage;
     std::thread schedule(Daemon::Schedule, std::ref(storage), args.GetPathListFile(), args.GetSleepDuration());
 
-    while (true) {
+    bool running = true;
+    while (running) {
         IpcClient *client = conn.WaitForClient();
         int message = client->ReceiveCommand();
 
@@ -30,8 +31,9 @@ void Daemon::Start(ArgumentParser args) {
                 break;
             }
             case ArgumentParser::KILL:
+                running = false;
                 storage.mtx.lock(); // wait for all db operations to end
-                exit(0);
+                break;
             default:
                 break;
         }
