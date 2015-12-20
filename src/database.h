@@ -4,6 +4,7 @@
 
 #include <db_cxx.h>
 #include <string>
+#include <memory>
 
 // Is POD, so can be written to DB
 struct DbData {
@@ -41,7 +42,7 @@ public:
     void Store(DbRecord record);
     bool Get(DbRecord *record);
 private:
-    Db *db = new Db(NULL, 0);
+    std::shared_ptr<Db> db = std::make_shared<Db>(nullptr, 0);
 };
 
 

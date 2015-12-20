@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <cstring>
 #include <string>
+#include <vector>
 
 DbRecord::DbRecord() { }
 
@@ -64,10 +65,10 @@ Database::~Database() {
 }
 
 void Database::Store(std::string filename, unsigned char *digest) {
-    char *cstr = new char[filename.length() + 1];
-    memcpy(cstr, filename.c_str(), filename.length() + 1);
+    std::vector<char> cstr(filename.length() + 1);
+    memcpy(cstr.data(), filename.c_str(), filename.length() + 1);
 
-    Dbt key(cstr, static_cast<uint32_t>(filename.length()));
+    Dbt key(cstr.data(), static_cast<uint32_t>(filename.length()));
     Dbt value(digest, DIGEST_SIZE);
 
     db->put(NULL, &key, &value, DB_OVERWRITE_DUP);
@@ -76,10 +77,10 @@ void Database::Store(std::string filename, unsigned char *digest) {
 bool Database::Get(std::string filename, unsigned char *digest) {
     int ret = 0;
 
-    char *cstr = new char[filename.length() + 1];
-    memcpy(cstr, filename.c_str(), filename.length() + 1);
+    std::vector<char> cstr(filename.length() + 1);
+    memcpy(cstr.data(), filename.c_str(), filename.length() + 1);
 
-    Dbt key(cstr, static_cast<uint32_t>(filename.length()));
+    Dbt key(cstr.data(), static_cast<uint32_t>(filename.length()));
     Dbt data(digest, DIGEST_SIZE);
     data.set_ulen(DIGEST_SIZE);
     data.set_flags(DB_DBT_USERMEM);

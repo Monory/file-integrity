@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
         case ArgumentParser::STORE:
         case ArgumentParser::CHECK: {
             IpcConnection socket("\0INTEGRITY");
-            IpcClient *client = socket.MakeClient();
+            std::shared_ptr<IpcClient> client = socket.MakeClient();
 
             client->SendCommand(arguments.GetMode());
             break;

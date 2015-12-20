@@ -3,6 +3,7 @@
 #define SRC_SOCKET_H_
 
 #include <string>
+#include <memory>
 #include <sys/socket.h>
 #include <sys/un.h>
 
@@ -27,8 +28,8 @@ public:
     IpcConnection(const char *name);
     ~IpcConnection();
     void Listen();
-    IpcClient *WaitForClient();
-    IpcClient *MakeClient();
+    std::shared_ptr<IpcClient> WaitForClient();
+    std::shared_ptr<IpcClient> MakeClient();
 private:
     char *socket_name;
     int socket_descriptor;
