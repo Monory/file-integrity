@@ -11,7 +11,7 @@
 #include "storage.h"
 #include "config.h"
 
-void Daemon::Start(ArgumentParser args) {
+Daemon::Daemon(ArgumentParser args) {
     ConfigParser config(args.GetConfig());
     plog::init<plog::LogFormatter>(config.GetLogSeverity(), config.GetLogFilename().c_str());
 
@@ -22,9 +22,9 @@ void Daemon::Start(ArgumentParser args) {
 
     daemon(1, 0);
 
-    std::thread schedule(Daemon::Schedule, std::ref(storage), config.GetPathListFile(), config.GetSleepDuration());
+    std::thread schedule(&Daemon::Schedule, this, std::ref(storage), config.GetPathListFile(), config.GetSleepDuration());
 
-    while (true) {
+    while (running) {
         IpcClient *client = conn.WaitForClient();
         int message = client->ReceiveCommand();
 
@@ -38,14 +38,17 @@ void Daemon::Start(ArgumentParser args) {
                 break;
             }
             case ArgumentParser::KILL:
+                running = false;
                 storage.mtx.lock(); // wait for all db operations to end
-                exit(0);
+                break;
             default:
                 break;
         }
 
         delete client;
     }
+
+    schedule.join();
 }
 
 void Daemon::Kill() {
@@ -66,8 +69,15 @@ void Daemon::Check(Storage &storage, std::string path_list_file) {
 }
 
 void Daemon::Schedule(Storage &storage, std::string path_list_file, int sleep_duration) {
-    while (true) {
-        Daemon::Check(storage, path_list_file);
-        std::this_thread::sleep_for(std::chrono::seconds(sleep_duration));
+    int time_left = sleep_duration;
+
+    while (running) {
+        if (time_left) {
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            --time_left;
+        } else {
+            Daemon::Check(storage, path_list_file);
+            time_left = sleep_duration;
+        }
     }
 }
