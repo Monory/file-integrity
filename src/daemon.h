@@ -8,12 +8,14 @@
 
 class Daemon {
 public:
-    static void Start(ArgumentParser args);
+    Daemon(ArgumentParser args);
     static void Kill();
 private:
-    static void Store(Storage &storage, std::string path_list_file);
-    static void Check(Storage &storage, std::string path_list_file);
-    static void Schedule(Storage &storage, std::string path_list_file, int sleep_duration);
+    void Store(Storage &storage, std::string path_list_file);
+    void Check(Storage &storage, std::string path_list_file);
+    void Schedule(Storage &storage, std::string path_list_file, int sleep_duration);
+
+    bool running = true;
 };
 
 #endif //SRC_DAEMON_H_
