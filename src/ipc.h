@@ -10,11 +10,11 @@
 class IpcClient {
 public:
     IpcClient(int client_descriptor);
-    IpcClient(int client_descriptor, struct sockaddr_un address);
+    IpcClient(int client_descriptor, const struct sockaddr_un &address);
     ~IpcClient();
     void SendCommand(int message) const;
     int ReceiveCommand() const;
-    void SendString(std::string message) const;
+    void SendString(const std::string &message) const;
     std::string ReceiveString() const;
 private:
     int descriptor;

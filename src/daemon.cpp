@@ -11,7 +11,7 @@
 #include "storage.h"
 #include "config.h"
 
-Daemon::Daemon(ArgumentParser args) {
+Daemon::Daemon(const ArgumentParser &args) {
     ConfigParser config(args.GetConfig());
     plog::init<plog::LogFormatter>(config.GetLogSeverity(), config.GetLogFilename().c_str());
 
@@ -57,17 +57,17 @@ void Daemon::Kill() {
     client->SendCommand(ArgumentParser::KILL);
 }
 
-void Daemon::Store(Storage &storage, std::string path_list_file) {
+void Daemon::Store(Storage &storage, const std::string &path_list_file) {
     auto path_list = PathListParser(path_list_file);
     storage.StorePathListMetadata(path_list);
 }
 
-void Daemon::Check(Storage &storage, std::string path_list_file) {
+void Daemon::Check(const Storage &storage, const std::string &path_list_file) {
     auto path_list = PathListParser(path_list_file);
     storage.CheckPathListMetadata(path_list);
 }
 
-void Daemon::Schedule(Storage &storage, std::string path_list_file, int sleep_duration) {
+void Daemon::Schedule(Storage &storage, const std::string &path_list_file, int sleep_duration) {
     int time_left = sleep_duration;
 
     while (running) {

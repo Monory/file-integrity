@@ -7,7 +7,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-PathListParser::PathListParser(std::string config_filename) {
+PathListParser::PathListParser(const std::string &config_filename) {
     using boost::property_tree::ptree;
     ptree pt;
 
@@ -23,7 +23,7 @@ PathListParser::PathListParser(std::string config_filename) {
     }
 }
 
-bool Path::CheckRegex(std::string filename) const {
+bool Path::CheckRegex(const std::string &filename) const {
     std::regex expression(regex);
     return std::regex_match(filename, expression);
 }

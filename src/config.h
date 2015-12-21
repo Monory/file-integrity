@@ -7,7 +7,7 @@
 
 class ConfigParser {
 public:
-    ConfigParser(std::string config_file);
+    ConfigParser(const std::string &config_file);
     int GetSleepDuration() const;
     std::string GetPathListFile() const;
     std::string GetLogFilename() const;

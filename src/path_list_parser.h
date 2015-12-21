@@ -14,13 +14,13 @@ public:
     std::string regex;
     bool recursive;
 private:
-    bool CheckRegex(std::string filename) const;
+    bool CheckRegex(const std::string &filename) const;
 };
 
 
 class PathListParser {
 public:
-    PathListParser(std::string config_filename);
+    PathListParser(const std::string &config_filename);
     boost::unordered_set<boost::filesystem::path> Files() const;
 private:
     std::vector<Path> paths;

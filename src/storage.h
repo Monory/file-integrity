@@ -12,12 +12,12 @@
 class Storage {
 public:
     enum CheckResult: int { PASS = 0, FAIL = 1, NOT_FOUND = 2 };
-    void StorePathListMetadata(PathListParser parser);
-    bool CheckPathListMetadata(PathListParser parser) const;
+    void StorePathListMetadata(const PathListParser &parser);
+    bool CheckPathListMetadata(const PathListParser &parser) const;
     mutable std::mutex mtx;
 private:
-    void StoreMetadata(std::string filename);
-    CheckResult CheckMetadata(std::string filename) const;
+    void StoreMetadata(const std::string &filename);
+    CheckResult CheckMetadata(const std::string &filename) const;
     Database db;
     Digest digest;
 };

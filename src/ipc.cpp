@@ -41,7 +41,7 @@ IpcClient::IpcClient(int client_descriptor) {
     descriptor = client_descriptor;
 }
 
-IpcClient::IpcClient(int client_descriptor, struct sockaddr_un address) : IpcClient(client_descriptor) {
+IpcClient::IpcClient(int client_descriptor, const struct sockaddr_un &address) : IpcClient(client_descriptor) {
     connect(descriptor, (struct sockaddr *) &address, sizeof(address));
 }
 
@@ -59,7 +59,7 @@ int IpcClient::ReceiveCommand() const {
     return message;
 }
 
-void IpcClient::SendString(std::string message) const {
+void IpcClient::SendString(const std::string &message) const {
     int size = message.size();
     write(descriptor, &size, sizeof(size));
 

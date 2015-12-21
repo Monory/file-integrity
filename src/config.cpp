@@ -4,7 +4,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-ConfigParser::ConfigParser(std::string config_file) {
+ConfigParser::ConfigParser(const std::string &config_file) {
     using boost::property_tree::ptree;
     ptree pt;
 
