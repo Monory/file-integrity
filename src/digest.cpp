@@ -16,7 +16,7 @@ Digest::~Digest() {
     EVP_MD_CTX_destroy(context);
 }
 
-void Digest::DigestFile(std::string filename, unsigned char *const digest) const {
+void Digest::DigestFile(const std::string &filename, unsigned char *const digest) const {
     std::ifstream file;
     file.open(filename, std::ios::in | std::ios::binary);
 

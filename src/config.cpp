@@ -4,7 +4,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
-ConfigParser::ConfigParser(std::string config_file) {
+ConfigParser::ConfigParser(const std::string &config_file) {
     using boost::property_tree::ptree;
     ptree pt;
 
@@ -23,18 +23,18 @@ ConfigParser::ConfigParser(std::string config_file) {
     log_filename = pt.get("log_filename", "integrity.log");
 }
 
-int ConfigParser::GetSleepDuration() {
+int ConfigParser::GetSleepDuration() const {
     return sleep_duration;
 }
 
-std::string ConfigParser::GetPathListFile() {
+std::string ConfigParser::GetPathListFile() const {
     return path_list_file;
 }
 
-plog::Severity ConfigParser::GetLogSeverity() {
+plog::Severity ConfigParser::GetLogSeverity() const {
     return log_severity;
 }
 
-std::string ConfigParser::GetLogFilename() {
+std::string ConfigParser::GetLogFilename() const {
     return log_filename;
 }

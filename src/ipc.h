@@ -10,12 +10,12 @@
 class IpcClient {
 public:
     IpcClient(int client_descriptor);
-    IpcClient(int client_descriptor, struct sockaddr_un address);
+    IpcClient(int client_descriptor, const struct sockaddr_un &address);
     ~IpcClient();
-    void SendCommand(int message);
-    int ReceiveCommand();
-    void SendString(std::string message);
-    std::string ReceiveString();
+    void SendCommand(int message) const;
+    int ReceiveCommand() const;
+    void SendString(const std::string &message) const;
+    std::string ReceiveString() const;
 private:
     int descriptor;
 };
@@ -28,8 +28,8 @@ public:
     IpcConnection(const char *name);
     ~IpcConnection();
     void Listen();
-    std::shared_ptr<IpcClient> WaitForClient();
-    std::shared_ptr<IpcClient> MakeClient();
+    std::shared_ptr<IpcClient> WaitForClient() const;
+    std::shared_ptr<IpcClient> MakeClient() const;
 private:
     char *socket_name;
     int socket_descriptor;

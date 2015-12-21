@@ -8,7 +8,7 @@
 #include <boost/filesystem.hpp>
 #include <plog/Log.h>
 
-void Storage::StoreMetadata(std::string filename) {
+void Storage::StoreMetadata(const std::string &filename) {
     struct stat attributes;
     stat(filename.c_str(), &attributes);
 
@@ -19,7 +19,7 @@ void Storage::StoreMetadata(std::string filename) {
     db.Store(record);
 }
 
-Storage::CheckResult Storage::CheckMetadata(std::string filename) {
+Storage::CheckResult Storage::CheckMetadata(const std::string &filename) const {
     struct stat attributes;
     stat(filename.c_str(), &attributes);
     DbRecord current_metadata(filename, attributes);
@@ -39,7 +39,7 @@ Storage::CheckResult Storage::CheckMetadata(std::string filename) {
     }
 }
 
-void Storage::StorePathListMetadata(PathListParser parser) {
+void Storage::StorePathListMetadata(const PathListParser &parser) {
     namespace fs = boost::filesystem;
     boost::unordered_set<fs::path> files = parser.Files();
 
@@ -51,7 +51,7 @@ void Storage::StorePathListMetadata(PathListParser parser) {
     mtx.unlock();
 }
 
-bool Storage::CheckPathListMetadata(PathListParser parser) {
+bool Storage::CheckPathListMetadata(const PathListParser &parser) const {
     bool fail = false;
     namespace fs = boost::filesystem;
 

@@ -8,7 +8,7 @@
 
 DbRecord::DbRecord() { }
 
-DbRecord::DbRecord(std::string filename, struct stat attributes) {
+DbRecord::DbRecord(const std::string &filename, const struct stat &attributes) {
     this->filename = filename;
 
     this->data.inode = attributes.st_ino;
@@ -22,7 +22,7 @@ DbRecord::DbRecord(std::string filename, struct stat attributes) {
     this->data.status_change_time = attributes.st_ctim;
 }
 
-bool DbRecord::operator==(const DbRecord &b) {
+bool DbRecord::operator==(const DbRecord &b) const {
     if (filename != b.filename ||
         data.inode != b.data.inode ||
         data.mode != b.data.mode ||
@@ -47,7 +47,7 @@ bool DbRecord::operator==(const DbRecord &b) {
     return true;
 }
 
-bool DbRecord::operator!=(const DbRecord &b) {
+bool DbRecord::operator!=(const DbRecord &b) const {
     return !(*this == b);
 }
 
@@ -64,7 +64,7 @@ Database::~Database() {
     db->close(0);
 }
 
-void Database::Store(std::string filename, unsigned char *digest) {
+void Database::Store(const std::string &filename, unsigned char *digest) {
     std::vector<char> cstr(filename.length() + 1);
     memcpy(cstr.data(), filename.c_str(), filename.length() + 1);
 
@@ -74,7 +74,7 @@ void Database::Store(std::string filename, unsigned char *digest) {
     db->put(NULL, &key, &value, DB_OVERWRITE_DUP);
 }
 
-bool Database::Get(std::string filename, unsigned char *digest) {
+bool Database::Get(const std::string &filename, unsigned char *digest) const {
     int ret = 0;
 
     std::vector<char> cstr(filename.length() + 1);
@@ -94,7 +94,7 @@ bool Database::Get(std::string filename, unsigned char *digest) {
     }
 }
 
-void Database::Store(DbRecord record) {
+void Database::Store(DbRecord &record) {
     // const_cast is acceptable because BDB developers did not properly put const modifiers
     Dbt key(const_cast<char *>(record.filename.c_str()), record.filename.length());
     Dbt value(&record.data, sizeof(record.data));
@@ -102,7 +102,7 @@ void Database::Store(DbRecord record) {
     db->put(NULL, &key, &value, DB_OVERWRITE_DUP);
 }
 
-bool Database::Get(DbRecord *record) {
+bool Database::Get(DbRecord *record) const {
     int return_value;
 
     Dbt key(const_cast<char *>(record->filename.c_str()), record->filename.length());

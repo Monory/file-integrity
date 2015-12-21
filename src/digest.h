@@ -9,7 +9,7 @@ class Digest {
 public:
     Digest();
     ~Digest();
-    void DigestFile(std::string filename, unsigned char *const digest) const;
+    void DigestFile(const std::string &filename, unsigned char *const digest) const;
 private:
     EVP_MD_CTX *context;
     const unsigned int BUFFER_SIZE = 32 * 1024;

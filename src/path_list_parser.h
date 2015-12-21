@@ -9,22 +9,19 @@
 
 class Path {
 public:
-    boost::unordered_set<boost::filesystem::path> Files();
+    boost::unordered_set<boost::filesystem::path> Files() const;
     std::string path;
     std::string regex;
     bool recursive;
 private:
-    bool CheckRegex(std::string filename);
+    bool CheckRegex(const std::string &filename) const;
 };
 
 
 class PathListParser {
 public:
-    PathListParser(std::string config_filename);
-    boost::unordered_set<boost::filesystem::path> Files();
-    //void ReparseConfig();
-    //void AddPath(Path path);
-    //static std::vector<Path> ParseConfig(std::string config_filename);
+    PathListParser(const std::string &config_filename);
+    boost::unordered_set<boost::filesystem::path> Files() const;
 private:
     std::vector<Path> paths;
 };

@@ -87,14 +87,14 @@ Start options:
     this->config = config;
 }
 
-ArgumentParser::Mode ArgumentParser::GetMode() {
+ArgumentParser::Mode ArgumentParser::GetMode() const {
     return mode;
 }
 
-void ArgumentParser::PrintHelpMessage() {
+void ArgumentParser::PrintHelpMessage() const {
     std::cout << HELP_MESSAGE << std::endl;
 }
 
-std::string ArgumentParser::GetConfig() {
+std::string ArgumentParser::GetConfig() const {
     return config;
 }
