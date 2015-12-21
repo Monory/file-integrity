@@ -19,7 +19,7 @@ void Storage::StoreMetadata(std::string filename) {
     db.Store(record);
 }
 
-Storage::CheckResult Storage::CheckMetadata(std::string filename) {
+Storage::CheckResult Storage::CheckMetadata(std::string filename) const {
     struct stat attributes;
     stat(filename.c_str(), &attributes);
     DbRecord current_metadata(filename, attributes);
@@ -51,7 +51,7 @@ void Storage::StorePathListMetadata(PathListParser parser) {
     mtx.unlock();
 }
 
-bool Storage::CheckPathListMetadata(PathListParser parser) {
+bool Storage::CheckPathListMetadata(PathListParser parser) const {
     bool fail = false;
     namespace fs = boost::filesystem;
 
