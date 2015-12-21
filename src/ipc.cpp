@@ -28,12 +28,12 @@ void IpcConnection::Listen() {
     }
 }
 
-std::shared_ptr<IpcClient> IpcConnection::WaitForClient() {
+std::shared_ptr<IpcClient> IpcConnection::WaitForClient() const {
     int client = accept(socket_descriptor, NULL, NULL);
     return std::make_shared<IpcClient>(client);
 }
 
-std::shared_ptr<IpcClient> IpcConnection::MakeClient() {
+std::shared_ptr<IpcClient> IpcConnection::MakeClient() const {
     return std::make_shared<IpcClient>(socket_descriptor, address);
 }
 
@@ -49,17 +49,17 @@ IpcClient::~IpcClient() {
     close(descriptor);
 }
 
-void IpcClient::SendCommand(int message) {
+void IpcClient::SendCommand(int message) const {
     write(descriptor, &message, sizeof(message));
 }
 
-int IpcClient::ReceiveCommand() {
+int IpcClient::ReceiveCommand() const {
     int message;
     read(descriptor, &message, sizeof(message));
     return message;
 }
 
-void IpcClient::SendString(std::string message) {
+void IpcClient::SendString(std::string message) const {
     int size = message.size();
     write(descriptor, &size, sizeof(size));
 
@@ -81,7 +81,7 @@ void IpcClient::SendString(std::string message) {
     }
 }
 
-std::string IpcClient::ReceiveString() {
+std::string IpcClient::ReceiveString() const {
     int size;
     read(descriptor, &size, sizeof(size));
     std::string result = "";

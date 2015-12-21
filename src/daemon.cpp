@@ -22,7 +22,8 @@ Daemon::Daemon(ArgumentParser args) {
 
     daemon(1, 0);
 
-    std::thread schedule(&Daemon::Schedule, this, std::ref(storage), config.GetPathListFile(), config.GetSleepDuration());
+    std::thread
+        schedule(&Daemon::Schedule, this, std::ref(storage), config.GetPathListFile(), config.GetSleepDuration());
 
     while (running) {
         std::shared_ptr<IpcClient> client = conn.WaitForClient();

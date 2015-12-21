@@ -8,9 +8,9 @@ class ArgumentParser {
 public:
     enum Mode: int { UNKNOWN, CHECK, STORE, HELP, START, KILL };
     ArgumentParser(int argc, char *argv[]);
-    void PrintHelpMessage();
-    Mode GetMode();
-    std::string GetConfig();
+    void PrintHelpMessage() const;
+    Mode GetMode() const;
+    std::string GetConfig() const;
 private:
     const char *HELP_MESSAGE;
     ArgumentParser::Mode mode = UNKNOWN;

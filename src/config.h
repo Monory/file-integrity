@@ -8,10 +8,10 @@
 class ConfigParser {
 public:
     ConfigParser(std::string config_file);
-    int GetSleepDuration();
-    std::string GetPathListFile();
-    std::string GetLogFilename();
-    plog::Severity GetLogSeverity();
+    int GetSleepDuration() const;
+    std::string GetPathListFile() const;
+    std::string GetLogFilename() const;
+    plog::Severity GetLogSeverity() const;
 private:
     int sleep_duration = 3600;
     std::string path_list_file = "path_list.json";

@@ -25,8 +25,8 @@ class DbRecord {
 public:
     DbRecord();
     DbRecord(std::string filename, struct stat attributes);
-    bool operator==(const DbRecord &b);
-    bool operator!=(const DbRecord &b);
+    bool operator==(const DbRecord &b) const;
+    bool operator!=(const DbRecord &b) const;
     std::string filename;
     DbData data;
 };
@@ -38,9 +38,9 @@ public:
     Database();
     ~Database();
     void Store(std::string filename, unsigned char *digest);
-    bool Get(std::string filename, unsigned char *digest);
+    bool Get(std::string filename, unsigned char *digest) const;
     void Store(DbRecord record);
-    bool Get(DbRecord *record);
+    bool Get(DbRecord *record) const;
 private:
     std::shared_ptr<Db> db = std::make_shared<Db>(nullptr, 0);
 };

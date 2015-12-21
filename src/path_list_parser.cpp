@@ -23,12 +23,12 @@ PathListParser::PathListParser(std::string config_filename) {
     }
 }
 
-bool Path::CheckRegex(std::string filename) {
+bool Path::CheckRegex(std::string filename) const {
     std::regex expression(regex);
     return std::regex_match(filename, expression);
 }
 
-boost::unordered_set<boost::filesystem::path> Path::Files() {
+boost::unordered_set<boost::filesystem::path> Path::Files() const {
     namespace fs = boost::filesystem;
     boost::unordered_set<fs::path> result;
 
@@ -58,7 +58,7 @@ boost::unordered_set<boost::filesystem::path> Path::Files() {
     return result;
 }
 
-boost::unordered_set<boost::filesystem::path> PathListParser::Files() {
+boost::unordered_set<boost::filesystem::path> PathListParser::Files() const {
     namespace fs = boost::filesystem;
     boost::unordered_set<fs::path> result;
 
