@@ -13,7 +13,9 @@ public:
 private:
     void Store(Storage &storage, const std::string &path_list_file);
     void Check(const Storage &storage, const std::string &path_list_file);
-    void Schedule(Storage &storage, const std::string &path_list_file, int sleep_duration);
+    void Schedule(Storage &storage,
+                  const std::string &path_list_file,
+                  int sleep_duration);
 
     bool running = true;
 };

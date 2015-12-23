@@ -13,7 +13,8 @@ PathListParser::PathListParser(const std::string &config_filename) {
 
     read_json(config_filename, pt);
     auto paths = pt.equal_range("");
-    for (auto paths_iter = paths.first; paths_iter != paths.second; ++paths_iter) {
+    for (auto paths_iter = paths.first; paths_iter != paths.second;
+         ++paths_iter) {
         Path path;
         path.path = paths_iter->second.get<std::string>("path");
         path.regex = paths_iter->second.get<std::string>("regex");
@@ -39,7 +40,8 @@ boost::unordered_set<boost::filesystem::path> Path::Files() const {
         for (; dir != end; ++dir) {
             fs::path file_path = fs::canonical(dir->path());
 
-            if (fs::is_regular(file_path) && CheckRegex(file_path.filename().string())) {
+            if (fs::is_regular(file_path) &&
+                CheckRegex(file_path.filename().string())) {
                 result.insert(file_path);
             }
         }
@@ -49,7 +51,8 @@ boost::unordered_set<boost::filesystem::path> Path::Files() const {
         for (; dir != end; ++dir) {
             fs::path file_path = fs::canonical(dir->path());
 
-            if (fs::is_regular(file_path) && CheckRegex(file_path.filename().string())) {
+            if (fs::is_regular(file_path) &&
+                CheckRegex(file_path.filename().string())) {
                 result.insert(file_path);
             }
         }

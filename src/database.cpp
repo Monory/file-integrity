@@ -95,8 +95,11 @@ bool Database::Get(const std::string &filename, unsigned char *digest) const {
 }
 
 void Database::Store(DbRecord &record) {
-    // const_cast is acceptable because BDB developers did not properly put const modifiers
-    Dbt key(const_cast<char *>(record.filename.c_str()), record.filename.length());
+    // const_cast is acceptable because BDB developers
+    // did not properly put const modifiers
+    Dbt key(const_cast<char *>(record.filename.c_str()),
+            record.filename.length());
+
     Dbt value(&record.data, sizeof(record.data));
 
     db->put(NULL, &key, &value, DB_OVERWRITE_DUP);
@@ -105,7 +108,9 @@ void Database::Store(DbRecord &record) {
 bool Database::Get(DbRecord *record) const {
     int return_value;
 
-    Dbt key(const_cast<char *>(record->filename.c_str()), record->filename.length());
+    Dbt key(const_cast<char *>(record->filename.c_str()),
+            record->filename.length());
+            
     Dbt data(&record->data, sizeof(record->data));
     data.set_ulen(sizeof(record->data));
     data.set_flags(DB_DBT_USERMEM);
