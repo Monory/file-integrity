@@ -23,12 +23,16 @@ Daemon::Daemon(const ArgumentParser &args) {
 
     daemon(1, 0);
 
-    std::thread
-        schedule(&Daemon::Schedule,
-                 this,
-                 std::ref(storage),
-                 config.GetPathListFile(),
-                 config.GetSleepDuration());
+    std::unique_ptr<std::thread> schedule;
+
+    if (config.GetSleepDuration() > 0) {
+        schedule = std::unique_ptr<std::thread>(
+            new std::thread(&Daemon::Schedule,
+                            this,
+                            std::ref(storage),
+                            config.GetPathListFile(),
+                            config.GetSleepDuration()));
+    }
 
     while (running) {
         std::shared_ptr<IpcClient> client = conn.WaitForClient();
@@ -52,7 +56,9 @@ Daemon::Daemon(const ArgumentParser &args) {
         }
     }
 
-    schedule.join();
+    if (config.GetSleepDuration() > 0) {
+        schedule->join();
+    }
 }
 
 void Daemon::Kill() {
