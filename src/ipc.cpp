@@ -21,10 +21,13 @@ IpcConnection::~IpcConnection() {
 }
 
 void IpcConnection::Listen() {
-    bind(socket_descriptor, (struct sockaddr *) &address, sizeof(address)); // POSIX magic
+    bind(socket_descriptor,
+         (struct sockaddr *) &address,
+         sizeof(address)); // POSIX magic
     int status = listen(socket_descriptor, 3);
     if (status != 0) {
-        throw std::runtime_error("Socket error. Are your trying to run two instances?");
+        throw std::runtime_error(
+            "Socket error. Are your trying to run two instances?");
     }
 }
 
@@ -41,7 +44,8 @@ IpcClient::IpcClient(int client_descriptor) {
     descriptor = client_descriptor;
 }
 
-IpcClient::IpcClient(int client_descriptor, const struct sockaddr_un &address) : IpcClient(client_descriptor) {
+IpcClient::IpcClient(int client_descriptor, const struct sockaddr_un &address)
+    : IpcClient(client_descriptor) {
     connect(descriptor, (struct sockaddr *) &address, sizeof(address));
 }
 

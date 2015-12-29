@@ -13,7 +13,8 @@
 
 Daemon::Daemon(const ArgumentParser &args) {
     ConfigParser config(args.GetConfig());
-    plog::init<plog::LogFormatter>(config.GetLogSeverity(), config.GetLogFilename().c_str());
+    plog::init<plog::LogFormatter>(config.GetLogSeverity(),
+                                   config.GetLogFilename().c_str());
 
     IpcConnection conn("\0INTEGRITY");
     conn.Listen();
@@ -22,8 +23,16 @@ Daemon::Daemon(const ArgumentParser &args) {
 
     daemon(1, 0);
 
-    std::thread
-        schedule(&Daemon::Schedule, this, std::ref(storage), config.GetPathListFile(), config.GetSleepDuration());
+    std::unique_ptr<std::thread> schedule;
+
+    if (config.GetSleepDuration() > 0) {
+        schedule = std::unique_ptr<std::thread>(
+            new std::thread(&Daemon::Schedule,
+                            this,
+                            std::ref(storage),
+                            config.GetPathListFile(),
+                            config.GetSleepDuration()));
+    }
 
     while (running) {
         std::shared_ptr<IpcClient> client = conn.WaitForClient();
@@ -47,7 +56,9 @@ Daemon::Daemon(const ArgumentParser &args) {
         }
     }
 
-    schedule.join();
+    if (config.GetSleepDuration() > 0) {
+        schedule->join();
+    }
 }
 
 void Daemon::Kill() {
@@ -67,7 +78,9 @@ void Daemon::Check(const Storage &storage, const std::string &path_list_file) {
     storage.CheckPathListMetadata(path_list);
 }
 
-void Daemon::Schedule(Storage &storage, const std::string &path_list_file, int sleep_duration) {
+void Daemon::Schedule(Storage &storage,
+                      const std::string &path_list_file,
+                      int sleep_duration) {
     int time_left = sleep_duration;
 
     while (running) {

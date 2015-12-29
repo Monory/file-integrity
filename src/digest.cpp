@@ -16,7 +16,8 @@ Digest::~Digest() {
     EVP_MD_CTX_destroy(context);
 }
 
-void Digest::DigestFile(const std::string &filename, unsigned char *const digest) const {
+void Digest::DigestFile(const std::string &filename,
+                        unsigned char *const digest) const {
     std::ifstream file;
     file.open(filename, std::ios::in | std::ios::binary);
 
@@ -27,7 +28,9 @@ void Digest::DigestFile(const std::string &filename, unsigned char *const digest
 
     while (!file.eof()) {
         file.read(buffer.data(), BUFFER_SIZE);
-        EVP_DigestUpdate(context, buffer.data(), static_cast<size_t>(file.gcount()));
+        EVP_DigestUpdate(context,
+                         buffer.data(),
+                         static_cast<size_t>(file.gcount()));
     }
 
     uint32_t digest_size;
